@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="游戏架构,ECS,Entitas,框架,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="这篇文章主要用来解释如何使用Entitas来组织你的项目结构。本文假定你已经对Entitas的工作方式有足够的了解。因此你这不是一篇教你Entitas各种特性的文章。这篇文章的主要目的是使用Entitas框架使你的项目代码更加的简洁明了。">
+<meta name="keywords" content="游戏架构,ECS,Entitas,框架">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何使用Entitas来构建游戏">
+<meta property="og:url" content="http://yoursite.com/2018/06/16/How-To-Build-Game-With-Entitas/index.html">
+<meta property="og:site_name" content="Code-Game-Dream">
+<meta property="og:description" content="这篇文章主要用来解释如何使用Entitas来组织你的项目结构。本文假定你已经对Entitas的工作方式有足够的了解。因此你这不是一篇教你Entitas各种特性的文章。这篇文章的主要目的是使用Entitas框架使你的项目代码更加的简洁明了。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2018/06/16/How-To-Build-Game-With-Entitas/68747470733a2f2f692e696d6775722e636f6d2f5244576b6150582e706e67.png">
+<meta property="og:updated_time" content="2018-11-12T09:09:03.387Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="如何使用Entitas来构建游戏">
+<meta name="twitter:description" content="这篇文章主要用来解释如何使用Entitas来组织你的项目结构。本文假定你已经对Entitas的工作方式有足够的了解。因此你这不是一篇教你Entitas各种特性的文章。这篇文章的主要目的是使用Entitas框架使你的项目代码更加的简洁明了。">
+<meta name="twitter:image" content="http://yoursite.com/2018/06/16/How-To-Build-Game-With-Entitas/68747470733a2f2f692e696d6775722e636f6d2f5244576b6150582e706e67.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/06/16/How-To-Build-Game-With-Entitas/">
+
+
+
+
+
+  <title>如何使用Entitas来构建游戏 | Code-Game-Dream</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?99208f6ccef21085b06d50b811bf6981";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Code-Game-Dream</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-profile">
+          <a href="/profile/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-black-tie"></i> <br>
+            
+            简历
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/16/How-To-Build-Game-With-Entitas/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wolf_sk1">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code-Game-Dream">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">如何使用Entitas来构建游戏</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-16T17:18:32+08:00">
+                2018-06-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  这篇文章主要用来解释如何使用Entitas来组织你的项目结构。本文假定你已经对Entitas的工作方式有足够的了解。因此你这不是一篇教你Entitas各种特性的文章。这篇文章的主要目的是使用Entitas框架使你的项目代码更加的简洁明了。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h2><p>本文意译自<a href="https://github.com/sschmid/Entitas-CSharp/wiki/How-I-build-games-with-Entitas-%28FNGGames%29" target="_blank" rel="noopener">《How I build games with Entitas (FNGGames)》</a>这篇文章，是作者在阅读时对其文章内容的一个思想记录。以下正文。</p>
+<p>这篇文章主要用来解释如何使用Entitas来组织你的项目结构。本文假定你已经对Entitas的工作方式有足够的了解。因此你可以明白这不是一篇教你Entitas各种特性的文章。这篇文章的主要目的在于如何通过Entitas使你的项目代码可以更加的简洁明了。</p>
+<p>这篇文章将围绕下面列出的话题来展开。针对Views和view controllers的概念，我会使用Unity来举例说明，但这种思路可以应用到你使用的任何引擎中。</p>
+<ul>
+<li>定义 Data，Logic，View层</li>
+<li>解耦这些层</li>
+<li>使用接口来抽象化设计</li>
+<li>控制反转</li>
+<li>抽象化视图层（Views 和 view controllers）<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2></li>
+<li><strong>Data：</strong>游戏中的一些状态，如血量背包经验敌人类型ai状态移动方向和速度等等。在Entitas中，这些数据存在于Components中。</li>
+<li><strong>Login：</strong>数据如何进行运算的一些规则。比如放入背包，建造物品，武器开火等，在Entitas中，Logic将被实现为Systems。</li>
+<li><strong>View：</strong>用来向玩家展示游戏状态的代码，如渲染，动画，音频，ui组件等。在我的案例中，他们实际上就是存在于GameObject上的MonoBehaviours。</li>
+<li><strong>Services：</strong>外部的信息模块，信息源。如，寻路，排行榜，反作弊，社交，物理系统，甚至包含游戏引擎本身。</li>
+<li><strong>Input：</strong>外部的输入系统。通常可以有限的访问游戏逻辑的一部分。如控制器，键盘鼠标网络输入。<h2 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h2>任何游戏的核心都是通过CPU在做数值模拟，每一个游戏本质上都是一组组的数据（游戏状态）产生一些有规则的周期性的变化（游戏的逻辑）。游戏状态包括得分，血量，经验，NPC对话，库存等东西。游戏逻辑规定了这些数据通过哪种规则进行转化（如调用PutItemInBag方法）来改变游戏的状态。理论上整个这个过程或者说模拟都可以在不存在任何附加层的状态下进行。</li>
+</ul>
+<p>通常来说，游戏与纯模拟的区别在于，游戏有一个外部用户可以使用模拟逻辑来从外界改变游戏的状态。随着用户的加入，游戏也应该将一些游戏状态用适当的方式转达给用户。这就是视图层（View Layer）。因此有一部分代码会用来展现游戏的状态，如渲染，播放音频，更新UI组件等。没有这层，用户便无法理解与游戏中模拟系统的交互的过程。</p>
+<p>大多数游戏架构的目的是为了使视图，逻辑，数据层更方便的分离。数据模拟层不应该关心甚至不需要去知道他们如何对应屏幕的图像。而当玩家受伤时，进行伤害计算的代码也不应该在屏幕渲染血液或者播放疼痛声音效果的代码中出现。</p>
+<p>我在我的项目中使用如下图所示的架构来保持上文所述的这种分离。我将试着描述图中的每一个部分的含义。通过接口的方式有助于这些东西的抽象化。<br><img src="./68747470733a2f2f692e696d6775722e636f6d2f5244576b6150582e706e67.png" alt="Alt text"></p>
+<h2 id="抽象化的作用"><a href="#抽象化的作用" class="headerlink" title="抽象化的作用"></a>抽象化的作用</h2><p>抽象化是解决<strong>你想做什么</strong>和<strong>你如何去做这件事儿</strong>之间强耦合的一种方式。举例来说，假设我们有一个函数是用来输出调试信息给用户的。</p>
+<h3 id="笨办法"><a href="#笨办法" class="headerlink" title="笨办法"></a>笨办法</h3><p>Debug.Log就是一个广为人知的笨办法。你需要把这个方法放在各个需要输出调试信息的地方。这样在你的所有代码中都立刻产生了非常强的耦合，成为了代码维护的噩梦。</p>
+<h3 id="笨办法有哪些问题"><a href="#笨办法有哪些问题" class="headerlink" title="笨办法有哪些问题"></a>笨办法有哪些问题</h3><p>试想一下，如果你想将调试信息记录在某个日志文件中而不是直接输出在控制台时，你打算在游戏内实现一个调试控制台时，你必须在你所有涉及到Debug.Log代码的地方添加新的代码或者替换掉旧的代码调用。甚至对于中型项目来说这都是一个噩梦。</p>
+<p>你也将拥有一些令人困惑的，可读性较差的代码，因为这些代码没有将责任分离。如果你完成了一个Unity示例项目，你会觉得这些还行，没那么不堪。那是因为Unity帮你做了一些事儿，实际上你的CharacterController在处理移动时，根本不应该存在对原始的用户输入的处理，管理背包，播放脚步声或者发facebook的这些代码。你应该只让你的角色移动，从而分隔焦点。</p>
+<h3 id="解耦的代码-Entitas的实现"><a href="#解耦的代码-Entitas的实现" class="headerlink" title="解耦的代码 - Entitas的实现"></a>解耦的代码 - Entitas的实现</h3><p>那让我们看看如果用Entitas来做的话，会比笨方法好多少。</p>
+<p>在Entitas中，我们会先创建一个LogMessageComponent组件，并设计一个用来收集信息同时进行实际操作的ReactiveSystem系统。我们可以很轻松的创建一个Entity，然后挂上对应的组件并且将消息输出在控制台上。<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"><span class="keyword">using</span> Entitias; </span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"></span><br><span class="line"><span class="comment">// debug message component</span></span><br><span class="line">[<span class="meta">Debug</span>] </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">sealed</span> <span class="keyword">class</span> <span class="title">DebugLogComponent</span> : <span class="title">IComponent</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> message;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// reactive system to handle messages</span></span><br><span class="line">public class HandleDebugLogMessageSystem : ReactiveSystem&lt;DebugEntity&gt; &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// collector: Debug.Matcher.DebugLog</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// filter: entity.hasDebugLog</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Execute</span> (<span class="params">List&lt;DebugEntity&gt; entities</span>)</span> &#123;</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="keyword">var</span> e <span class="keyword">in</span> entities) &#123;</span><br><span class="line">            Debug.Log(e.debugLog.message);</span><br><span class="line">            e.isDestroyed = <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>现在无论什么东西想去创建一条日志信息，他只需要创建一个Entity，然后这个系统就会关注这些事儿。我们可以随意的变更我们的实现，只需要修改这个系统中的某处代码。</p>
+<h3 id="Entitas官方这种实现的一些问题"><a href="#Entitas官方这种实现的一些问题" class="headerlink" title="Entitas官方这种实现的一些问题"></a>Entitas官方这种实现的一些问题</h3><p>一般来说这种方法已经足够了，特别是对一些比较小的项目来说。但这种方式也不是完全没有问题的，我们直接使用了Unity的API，将我们的系统的实现与Unity产生了强依赖。</p>
+<p>如果你的调试信息需要记录在一个json文件中或者通过网络发送你的调试信息，你必须做一些补丁式的特殊实现。同时这个系统也将同时饮用很多不必要的库文件（如UnityEngine，json库，网络库等等）。同时代码的可读性会变差，当你的工具库发生修改的时候，代码出错的可能性也会提升。更别说如果你要更换你的引擎的话，你就得完完全全重写你的游戏代码。</p>
+<h2 id="接口示例"><a href="#接口示例" class="headerlink" title="接口示例"></a>接口示例</h2><p>在C#中可以使用接口来解决这些依赖问题。</p>
+<p>当我在填写接口的时候，我只需要关注我实际上想要干什么，然后写下一些带有自述性的简单API就可以。那LogMessage系统来举例：<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// the interface </span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title">ILogService</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">LogMessage</span>(<span class="params"><span class="keyword">string</span> message</span>)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// a class that implements the interface</span></span><br><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">UnityDebugLogService</span> : <span class="title">ILogService</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">LogMessage</span>(<span class="params"><span class="keyword">string</span> message</span>)</span> &#123;</span><br><span class="line">        Debug.Log(message);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// another class that does things differently but still implements the interface</span></span><br><span class="line"><span class="keyword">using</span> SomeJsonLib;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">JsonLogService</span> : <span class="title">ILogService</span> &#123;</span><br><span class="line">    <span class="keyword">string</span> filepath;</span><br><span class="line">    <span class="keyword">string</span> filename;</span><br><span class="line">    <span class="keyword">bool</span> prettyPrint;</span><br><span class="line">    <span class="comment">// etc...</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">LogMessage</span>(<span class="params"><span class="keyword">string</span> message</span>)</span> &#123;</span><br><span class="line">        <span class="comment">// open file</span></span><br><span class="line">        <span class="comment">// parse contents</span></span><br><span class="line">        <span class="comment">// write new contents</span></span><br><span class="line">        <span class="comment">// close file</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后我们在系统中只需要直接使用ILogService接口就可以了，如果我们需要一个JsonLogService，我们只需要实现一个并将其填充到接口中去。System甚至可以在你实现之前就使用这个接口。<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// the previous reactive system becomes </span></span><br><span class="line">public class HandleDebugLogMessageSystem : ReactiveSystem&lt;DebugEntity&gt; &#123;</span><br><span class="line"></span><br><span class="line">    ILogService _logService;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// contructor needs a new argument to get a reference to the log service</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">HandleDebugLogMessageSystem</span>(<span class="params">Contexts contexts, ILogService logService</span>)</span> &#123;</span><br><span class="line">         <span class="comment">// could be a UnityDebugLogService or a JsonLogService</span></span><br><span class="line">        _logService = logService; </span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// collector: Debug.Matcher.DebugLog</span></span><br><span class="line">    <span class="comment">// filter: entity.hasDebugLog</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Execute</span> (<span class="params">List&lt;DebugEntity&gt; entities</span>)</span> &#123;</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="keyword">var</span> e <span class="keyword">in</span> entities) &#123;</span><br><span class="line">            _logService.LogMessage(e.DebugLog.message); <span class="comment">// using the interface to call the method</span></span><br><span class="line">            e.isDestroyed = <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>IInputService是我项目中一个相对更复杂一些的示例。我需要去思考哪些输入输出才是我真正需要的，我如何定义一个关于输入输出的集合。<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// the previous reactive system becomes </span></span><br><span class="line">public class HandleDebugLogMessageSystem : ReactiveSystem&lt;DebugEntity&gt; &#123;</span><br><span class="line"></span><br><span class="line">    ILogService _logService;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// contructor needs a new argument to get a reference to the log service</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">HandleDebugLogMessageSystem</span>(<span class="params">Contexts contexts, ILogService logService</span>)</span> &#123;</span><br><span class="line">         <span class="comment">// could be a UnityDebugLogService or a JsonLogService</span></span><br><span class="line">        _logService = logService; </span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// collector: Debug.Matcher.DebugLog</span></span><br><span class="line">    <span class="comment">// filter: entity.hasDebugLog</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Execute</span> (<span class="params">List&lt;DebugEntity&gt; entities</span>)</span> &#123;</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="keyword">var</span> e <span class="keyword">in</span> entities) &#123;</span><br><span class="line">            _logService.LogMessage(e.DebugLog.message); <span class="comment">// using the interface to call the method</span></span><br><span class="line">            e.isDestroyed = <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>现在我就可以具体去实现EmitInputSystem来将实际的操作数据放入Entitas中，然后这些数据就可以直接被拿去操作了。这样我便可以直接切换我的实现使其脱离Unity，而System也只关心从接口中可以查询到什么。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">EmitInputSystem</span> : <span class="title">IInitalizeSystem</span>, <span class="title">IExecuteSystem</span> &#123;    </span><br><span class="line">    Contexts _contexts;</span><br><span class="line">    IInputService _inputService; </span><br><span class="line">    InputEntity _inputEntity;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// contructor needs a new argument to get a reference to the log service</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">EmitInputSystem</span> (<span class="params">Contexts contexts, IInputService inputService</span>)</span> &#123;</span><br><span class="line">        _contexts = contexts;</span><br><span class="line">        _inputService= inputService;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Initialize</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">        <span class="comment">// use unique flag component to create an entity to store input components        </span></span><br><span class="line">        _contexts.input.isInputManger = <span class="literal">true</span>;</span><br><span class="line">        _inputEntity = _contexts.input.inputEntity;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// clean simple api, </span></span><br><span class="line">    <span class="comment">// descriptive, </span></span><br><span class="line">    <span class="comment">// obvious what it does</span></span><br><span class="line">    <span class="comment">// resistant to change</span></span><br><span class="line">    <span class="comment">// no using statements</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Execute</span> (<span class="params"></span>)</span> &#123;</span><br><span class="line">        inputEntity.isButtonAInput = _inputService.button1Pressed;</span><br><span class="line">        inputEntity.ReplaceLeftStickInput(_inputService.leftStick);</span><br><span class="line">        <span class="comment">// ... lots more queries</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在我希望你明白了我所说的抽象化，我将逻辑从具体视线中抽离出来。比如在输入系统中我只关系用户是否按下了按钮A，我不关心它是使用键盘还是鼠标还是手柄来按下的，对于我的系统来说这根本无所谓。</p>
+<p>再比如TimeService，我只需要说，给我一个TimeDelta。然后我也根本不需要去关心这个TimeDelta是由Unity还是XNA还是Unreal给出的。我只需要知道那是多少就行。</p>
+<h2 id="控制反转"><a href="#控制反转" class="headerlink" title="控制反转"></a>控制反转</h2><p>由于我们使用了接口，目前我们面临着一个新的问题，那就是我们需要以某种形式将接口的具体实例注入到接口中去。在上一个例子中，我通过构造函数来传递这个实例。但这也会导致系统将有很多的构造函数。我们希望让我们的Service实例成为可全局访问的，也希望我们的代码中有且仅有一处初始化方法使得我们可以确定我们的这些接口使用哪种实现。然后我们在哪里创建他们的实现并使其可以全局访问。这样我们就可以直接使用而不用通过构造函数传来传去。幸好这在Entitas中很容易实现。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Services</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">readonly</span> IViewService View;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">readonly</span> IApplicationService Application;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">readonly</span> ITimeService Time;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">readonly</span> IInputService Input;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">readonly</span> IAiService Ai;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">readonly</span> IConfigurationService Config;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">readonly</span> ICameraService Camera;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">readonly</span> IPhysicsService Physics;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Services</span>(<span class="params">IViewService view, IApplicationService application, ITimeService time, IInputService input, IAiService ai, IConfigurationService config, ICameraService camera, IPhysicsService physics</span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        View = view;</span><br><span class="line">        Application = application;</span><br><span class="line">        Time = time;</span><br><span class="line">        Input = input;</span><br><span class="line">        Ai = ai;</span><br><span class="line">        Config = config;</span><br><span class="line">        Camera = camera;</span><br><span class="line">        Physics = physics;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 然后我就可以这么注入他们</span></span><br><span class="line"><span class="keyword">var</span> _services = <span class="keyword">new</span> Services(</span><br><span class="line">    <span class="keyword">new</span> UnityViewService(), <span class="comment">// responsible for creating gameobjects for views</span></span><br><span class="line">    <span class="keyword">new</span> UnityApplicationService(), <span class="comment">// gives app functionality like .Quit()</span></span><br><span class="line">    <span class="keyword">new</span> UnityTimeService(), <span class="comment">// gives .deltaTime, .fixedDeltaTime etc</span></span><br><span class="line">    <span class="keyword">new</span> InControlInputService(), <span class="comment">// provides user input</span></span><br><span class="line">    <span class="comment">// next two are monobehaviours attached to gamecontroller</span></span><br><span class="line">    GetComponent&lt;UnityAiService&gt;(), <span class="comment">// async steering calculations on MB</span></span><br><span class="line">    GetComponent&lt;UnityConfigurationService&gt;(), <span class="comment">// editor accessable global config</span></span><br><span class="line">    <span class="keyword">new</span> UnityCameraService(), <span class="comment">// camera bounds, zoom, fov, orthsize etc</span></span><br><span class="line">    <span class="keyword">new</span> UnityPhysicsService() <span class="comment">// raycast, checkcircle, checksphere etc.</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>在我的MetaContext中，我有一个唯一组件集合来持有这些系统的接口。<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">Meta, Unique</span>]</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">sealed</span> <span class="keyword">class</span> <span class="title">TimeServiceComponent</span> : <span class="title">IComponent</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> ITimeService instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后我增加了一个注册用的Feature组件并在其构造方法中增加了一个Services参数。通过传递Services来初始化若干Service的实现。<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">ServiceRegistrationSystems</span> : <span class="title">Feature</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ServiceRegistrationSystems</span>(<span class="params">Contexts contexts, Services services</span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        Add(<span class="keyword">new</span> RegisterViewServiceSystem(contexts, services.View));</span><br><span class="line">        Add(<span class="keyword">new</span> RegisterTimeServiceSystem(contexts, services.Time));</span><br><span class="line">        Add(<span class="keyword">new</span> RegisterApplicationServiceSystem(contexts, services.Application));</span><br><span class="line">        Add(<span class="keyword">new</span> RegisterInputServiceSystem(contexts, services.Input));</span><br><span class="line">        Add(<span class="keyword">new</span> RegisterAiServiceSystem(contexts, services.Ai));</span><br><span class="line">        Add(<span class="keyword">new</span> RegisterConfigurationServiceSystem(contexts, services.Config));</span><br><span class="line">        Add(<span class="keyword">new</span> RegisterCameraServiceSystem(contexts, services.Camera));</span><br><span class="line">        Add(<span class="keyword">new</span> RegisterPhysicsServiceSystem(contexts, services.Physics));</span><br><span class="line">        Add(<span class="keyword">new</span> ServiceRegistrationCompleteSystem(contexts));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 比如一个注册时间系统的例子</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">RegisterTimeServiceSystem</span> : <span class="title">IInitializeSystem</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> MetaContext _metaContext;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> ITimeService _timeService;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">RegisterTimeServiceSystem</span>(<span class="params">Contexts contexts, ITimeService timeService</span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        _metaContext = contexts.meta;</span><br><span class="line">        _timeService = timeService;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Initialize</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        _metaContext.ReplaceTimeService(_timeService);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>接下来我们就可以通过_contexts.meta.timeService.instance类似这样的调用来全局访问我们的Service。而我们将这种实现都放在了一起。这就使得我们不论是更换实现方式还是假造系统来进行测试都非常方便。我们通过<strong>控制反转</strong>这种方式解决了依赖性。</p>
+<h2 id="视图层抽象化"><a href="#视图层抽象化" class="headerlink" title="视图层抽象化"></a>视图层抽象化</h2><p>到目前为止，我们描述了上图左侧的Service接口部分，现在让我们看看右侧的View接口部分，原理基本一样。像我们之前说的，视图层就是用来展现游戏状态给玩家的，如动画音频渲染等。这一步的目标和之前一样，移除与特定游戏引擎或者第三方库的依赖，同时使代码变得整洁且具有可读性，让我们的系统不关心实际的实现细节。</p>
+<p>一个简单的办法是使用一个保有GameObject引用的ViewComponent组件，然后可能再来一个简单的AssignViewComponent组件作为标签，标示我们需要将当前Entity作为一个GameObject，使其成为一个View。为了这么做你需要去写一个Reactive System来处里AssignView同时去选出没有添加View组件的entity（!entity.hasView）来确保我们不会重复添加View。同时在这个System中甚至Component中，你必须直接使用Unity的API。这对解耦没有任何好处。</p>
+<p>我们可以使用上文描述的Service那样的方法来对View进行更进一步的抽象。思考下你的视图实际上需要哪些数据和方法然后写个接口出来。你的系统将使用这些接口来get/set这些数据。我管这个叫“ViewControllers”，这一层用来直接控制视图对象。因此他们将包含一些tranform相关数据，如（postion/scale/toration)以及一些其他的像tags，layers，names，enable/disable的数据。</p>
+<p>本质上来说，View应该会和一个entity绑定，然后我的System可能需要从Entity和其他部分获取一些游戏数据。比如我需要一个entity和Contexts instance的引用当我开始构建view的时候。同时我也需要能够在Entitas层面销毁我的View。这里有一个简单的示例</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title">IViewController</span> &#123;</span><br><span class="line">    Vector2D Position &#123;<span class="keyword">get</span>; <span class="keyword">set</span>;&#125;</span><br><span class="line">    Vector2D Scale &#123;<span class="keyword">get</span>; <span class="keyword">set</span>;&#125;</span><br><span class="line">    <span class="keyword">bool</span> Active &#123;<span class="keyword">get</span>; <span class="keyword">set</span>;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">InitializeView</span>(<span class="params">Contexts contexts, IEntity Entity</span>)</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">DestroyView</span>(<span class="params"></span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这是一个基于Unity的实现<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">UnityGameView</span> : <span class="title">Monobehaviour</span>, <span class="title">IViewController</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> Contexts _contexts;</span><br><span class="line">    <span class="keyword">protected</span> GameEntity _entity;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Vector2D Position &#123;</span><br><span class="line">        <span class="keyword">get</span> &#123;<span class="keyword">return</span> transform.position.ToVector2D();&#125; </span><br><span class="line">        <span class="keyword">set</span> &#123;transform.position = <span class="keyword">value</span>.ToVector2();&#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Vector2D Scale <span class="comment">// as above but with tranform.localScale</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">bool</span> Active &#123;<span class="keyword">get</span> &#123;<span class="keyword">return</span> gameObject.activeSelf;&#125; <span class="keyword">set</span> &#123;gameObject.SetActive(<span class="keyword">value</span>);&#125; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">InitializeView</span>(<span class="params">Contexts contexts, IEntity Entity</span>)</span> &#123;</span><br><span class="line">        _contexts = contexts;</span><br><span class="line">        _entity = (GameEntity)entity;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">DestroyView</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">        Object.Destroy(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们需要一个Service去创建这些视图并将它们绑定在Entity上。以下给出一个IViewService接口和对应的Unity实现。<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 一个Component用来保有ViewController引用</span></span><br><span class="line">[<span class="meta">Game</span>]</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">sealed</span> <span class="keyword">class</span> <span class="title">ViewComponent</span> : <span class="title">IComponent</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> IViewController instance;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 一个接口定义了我需要的一些数据</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title">IViewService</span> &#123;   </span><br><span class="line">    <span class="comment">// create a view from a premade asset (e.g. a prefab)</span></span><br><span class="line">    <span class="function">IViewController <span class="title">LoadAsset</span>(<span class="params">Contexts contexts, IEntity entity, <span class="keyword">string</span> assetName</span>)</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 对应的Unity实现</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">UnityViewService</span> : <span class="title">IViewService</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> IViewController <span class="title">LoadAsset</span>(<span class="params">Contexts contexts, IEntity entity, <span class="keyword">string</span> assetName</span>)</span> &#123;</span><br><span class="line">        <span class="keyword">var</span> viewGo = GameObject.Instantiate(Resources.Load&lt;GameObject&gt;(<span class="string">"Prefabs/"</span> + assetName));</span><br><span class="line">        <span class="keyword">if</span> (viewGo == <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">var</span> viewController = viewGo.GetComponent&lt;IViewController&gt;();</span><br><span class="line">        <span class="keyword">if</span> (viewController != <span class="literal">null</span>) viewController.InitializeView(contexts, entity);</span><br><span class="line">        <span class="keyword">return</span> viewController;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 对应的资源加载System可以将资源绑定到View上</span></span><br><span class="line">public class LoadAssetSystem : ReactiveSystem&lt;GameEntity&gt;, IInitializeSystem &#123;</span><br><span class="line">    <span class="keyword">readonly</span> Contexts _contexts;</span><br><span class="line">    <span class="keyword">readonly</span> IViewService _viewService;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// collector: GameMatcher.Asset</span></span><br><span class="line">    <span class="comment">// filter: entity.hasAsset &amp;&amp; !entity.hasView</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Initialize</span>(<span class="params"></span>)</span> &#123;    </span><br><span class="line">        <span class="comment">// grab the view service instance from the meta context</span></span><br><span class="line">        _viewService = _contexts.meta.viewService.instance;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Execute</span>(<span class="params">List&lt;GameEntity&gt; entities</span>)</span> &#123;</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="keyword">var</span> e <span class="keyword">in</span> entities) &#123;</span><br><span class="line">            <span class="comment">// call the view service to make a new view</span></span><br><span class="line">            <span class="keyword">var</span> view = _viewService.LoadAsset(_contexts, e, e.asset.name); </span><br><span class="line">            <span class="keyword">if</span> (view != <span class="literal">null</span>) e.ReplaceView(view);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 一个抽象于View的postion System</span></span><br><span class="line">public class SetViewPositionSystem : ReactiveSystem&lt;GameEntity&gt; &#123;</span><br><span class="line">    <span class="comment">// collector: GameMatcher.Position;</span></span><br><span class="line">    <span class="comment">// filter: entity.hasPosition &amp;&amp; entity.hasView</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Execute</span>(<span class="params">List&lt;GameEntity&gt; entities</span>)</span> &#123;</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="keyword">var</span> e <span class="keyword">in</span> entities) &#123;</span><br><span class="line">            e.view.instance.Position = e.position.<span class="keyword">value</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样就解耦了对Unity引擎的依懒性。</p>
+<h3 id="这样做的问题"><a href="#这样做的问题" class="headerlink" title="这样做的问题"></a>这样做的问题</h3><p>一个明显的缺陷就是你在写一个和视图层交互的System，这对于我们之前说的逻辑层不需要知道其他资源绘制过程的原则是一种破坏。因此我们将使用“Event”来实现完全的视图层解耦。</p>
+<h2 id="Event"><a href="#Event" class="headerlink" title="Event"></a>Event</h2><p>下面我将使用Event来简化刚才的项目，来使视图层和逻辑层充分分离。</p>
+<p>首先我们给PostionComponent加上一个Event属性，让代码生成器生成对应的监听器和事件系统。<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">Game, Event(true)</span>] <span class="comment">// generates events that are bound to the entities that raise them</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">sealed</span> <span class="keyword">class</span> <span class="title">PositionComponent</span> : <span class="title">IComponent</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> Vector2D <span class="keyword">value</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>代码生成器会自动生成<strong>PositionListererComponent</strong>组件和<strong>IPositionListener</strong>接口。我还会写一个<strong>IEventListener</strong>接口，来让所有的事件监听器都可以正确的在他们启动的时候初始化。<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title">IEventListener</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">RegisterListeners</span>(<span class="params">IEntity entity</span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>现在我们不需要让ViewService中的LoadAsset方法返回视图组件或其他返回值，同时我们还要添加一些代码来初始化事件的监听。<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> UnityViewService : IViewService &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// now returns void instead of IViewController</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">LoadAsset</span>(<span class="params">Contexts contexts, IEntity entity, <span class="keyword">string</span> assetName</span>)</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// as before </span></span><br><span class="line">        <span class="keyword">var</span> viewGo = GameObject.Instantiate(Resources.Load&lt;GameObject&gt;(<span class="string">"Prefabs/"</span> + name));</span><br><span class="line">        <span class="keyword">if</span> (viewGo == <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">var</span> viewController = viewGo.GetComponent&lt;IViewController&gt;();</span><br><span class="line">        <span class="keyword">if</span> (viewController != <span class="literal">null</span>) viewController.InitializeView(contexts, entity);      </span><br><span class="line">  </span><br><span class="line">        <span class="comment">// except we add some lines to find and initialize any event listeners</span></span><br><span class="line">        <span class="keyword">var</span> eventListeners = viewGo.GetComponents&lt;IEventListener&gt;();</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="keyword">var</span> listener <span class="keyword">in</span> eventListeners) listener.RegisterListeners(entity); </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>现在我们可以摆脱所有的SetViewXXXSystem，因为我们不会告诉视图任何事情，我们会让Monobehaviours来监听所有的变化，比如position：<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">PositionListener</span> : <span class="title">Monobehaviour</span>, <span class="title">IEventListener</span>, <span class="title">IPositionListener</span> &#123;</span><br><span class="line">    </span><br><span class="line">    GameEntity _entity;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">RegisterEventListeners</span>(<span class="params">IEntity entity</span>)</span> &#123;</span><br><span class="line">        _entity = (GameEntity)entity;</span><br><span class="line">        _entity.AddPositionListener(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">OnPosition</span>(<span class="params">GameEntity e, Vector2D newPosition</span>)</span> &#123;</span><br><span class="line">        transform.position = newPosition.ToVector2();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>只要将这个脚本添加到对应的Prefab上，GameObject就可以与Entity的Position变化保持同步。这样就完成了逻辑层与视图层的彻底解耦。</p>
+<p>这种通过Services来加载资源的方式也使得我们对初始化过程有了更强的控制能力，同时我们也可以通过添加IAudioPlayer，IAnimator等接口的方式来实现其他资源的加载，只要调整初始化顺序便可以避免以前类似Unity中的Start或者Update方法中类似的顺序问题。</p>
+<p>现在视图层变成了一个简单的监听器，只响应他感兴趣的组件变化。同时不需要发送任何信息到逻辑层。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/游戏架构/" rel="tag"># 游戏架构</a>
+          
+            <a href="/tags/ECS/" rel="tag"># ECS</a>
+          
+            <a href="/tags/Entitas/" rel="tag"># Entitas</a>
+          
+            <a href="/tags/框架/" rel="tag"># 框架</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/16/ink-text-game-engine/" rel="next" title="ink-面向文字游戏的预处理脚本语言">
+                <i class="fa fa-chevron-left"></i> ink-面向文字游戏的预处理脚本语言
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Wolf_sk1</p>
+              <p class="site-description motion-element" itemprop="description">把做出一款让周围人都喜欢的游戏当成一切的起点和现阶段的目标并为之努力。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wolfsk1" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="j13015252122@126.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://cowlevel.net/people/wolf_sk1" target="_blank" title="奶牛关">
+                      
+                        <i class="fa fa-fw fa-gamepad"></i>奶牛关</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#序言"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定义"><span class="nav-number">2.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#架构"><span class="nav-number">3.</span> <span class="nav-text">架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#抽象化的作用"><span class="nav-number">4.</span> <span class="nav-text">抽象化的作用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#笨办法"><span class="nav-number">4.1.</span> <span class="nav-text">笨办法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#笨办法有哪些问题"><span class="nav-number">4.2.</span> <span class="nav-text">笨办法有哪些问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解耦的代码-Entitas的实现"><span class="nav-number">4.3.</span> <span class="nav-text">解耦的代码 - Entitas的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Entitas官方这种实现的一些问题"><span class="nav-number">4.4.</span> <span class="nav-text">Entitas官方这种实现的一些问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接口示例"><span class="nav-number">5.</span> <span class="nav-text">接口示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#控制反转"><span class="nav-number">6.</span> <span class="nav-text">控制反转</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#视图层抽象化"><span class="nav-number">7.</span> <span class="nav-text">视图层抽象化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#这样做的问题"><span class="nav-number">7.1.</span> <span class="nav-text">这样做的问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Event"><span class="nav-number">8.</span> <span class="nav-text">Event</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wolf_sk1</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
