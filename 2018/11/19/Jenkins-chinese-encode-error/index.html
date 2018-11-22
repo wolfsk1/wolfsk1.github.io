@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Code-Game-Dream">
 <meta property="og:description" content="这篇文章主要描述了Jenkins中控制台输出也就是构建日志中出现中文乱码的解决方法与相关分析。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-19T10:29:57.526Z">
+<meta property="og:updated_time" content="2018-11-22T13:13:25.610Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Jenkins控制台中文乱码问题">
 <meta name="twitter:description" content="这篇文章主要描述了Jenkins中控制台输出也就是构建日志中出现中文乱码的解决方法与相关分析。">
@@ -366,7 +366,7 @@
       
 
       
-        <h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>jenkins使用war包的形式在windows上通过批处理脚本启动。构建时<strong>控制台输出</strong>（也就是日志部分）的中文显示为乱码。</p>
+        <h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>jenkins使用war包的形式在windows上通过批处理脚本启动。构建时<strong>控制台输出</strong>（也就是日志部分）的中文显示为乱码。11</p>
 <h2 id="问题涉及的一些知识点"><a href="#问题涉及的一些知识点" class="headerlink" title="问题涉及的一些知识点"></a>问题涉及的一些知识点</h2><ul>
 <li>jenkins的日志系统将控制台输出的日志重定向到某个日志文件中，因此文件的编码格式决定了日志的编码格式。构建相关日志文件在<strong>对应job目录下的build文件夹</strong>中，打开后可以查看编码格式来确定日志编码格式。</li>
 <li>在jenkins系统管理-系统信息中，可以查找到file.encoiing一栏，查看到当前的<strong>文件处理时所使用的</strong>编码格式。</li>
