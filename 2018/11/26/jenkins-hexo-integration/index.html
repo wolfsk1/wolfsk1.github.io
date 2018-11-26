@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="jenkins,持续集成,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="这篇文章主要描述了如何通过Jenkins来自动化Hexo博客的发布流程。">
+<meta name="keywords" content="jenkins,持续集成">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jenkins+Hexo集成">
+<meta property="og:url" content="http://yoursite.com/2018/11/26/jenkins-hexo-integration/index.html">
+<meta property="og:site_name" content="Code-Game-Dream">
+<meta property="og:description" content="这篇文章主要描述了如何通过Jenkins来自动化Hexo博客的发布流程。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2018/11/26/jenkins-hexo-integration/1542899392487.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/26/jenkins-hexo-integration/1542942066248.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/26/jenkins-hexo-integration/1543153255756.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/26/jenkins-hexo-integration/1543153435725.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/26/jenkins-hexo-integration/1543153543179.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/26/jenkins-hexo-integration/1543155043774.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/26/jenkins-hexo-integration/1543155080615.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/26/jenkins-hexo-integration/1543155504268.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/26/jenkins-hexo-integration/1543155524450.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/26/jenkins-hexo-integration/1543156225410.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/26/jenkins-hexo-integration/1543156711986.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/26/jenkins-hexo-integration/1543156774743.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/26/jenkins-hexo-integration/1543156832678.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/26/jenkins-hexo-integration/1543156853735.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/26/jenkins-hexo-integration/1543156884019.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/26/jenkins-hexo-integration/1543157410067.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/26/jenkins-hexo-integration/1543157661184.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/26/jenkins-hexo-integration/1543157708420.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/26/jenkins-hexo-integration/1543157871044.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/26/jenkins-hexo-integration/1543203132064.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/26/jenkins-hexo-integration/1543203360286.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/26/jenkins-hexo-integration/1543203443297.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/26/jenkins-hexo-integration/1543215716351.png">
+<meta property="og:updated_time" content="2018-11-26T07:20:06.024Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Jenkins+Hexo集成">
+<meta name="twitter:description" content="这篇文章主要描述了如何通过Jenkins来自动化Hexo博客的发布流程。">
+<meta name="twitter:image" content="http://yoursite.com/2018/11/26/jenkins-hexo-integration/1542899392487.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/11/26/jenkins-hexo-integration/">
+
+
+
+
+
+  <title>Jenkins+Hexo集成 | Code-Game-Dream</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?99208f6ccef21085b06d50b811bf6981";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Code-Game-Dream</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-profile">
+          <a href="/profile/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-black-tie"></i> <br>
+            
+            简历
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/26/jenkins-hexo-integration/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wolf_sk1">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code-Game-Dream">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Jenkins+Hexo集成</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-26T18:26:32+08:00">
+                2018-11-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  这篇文章主要描述了如何通过Jenkins来自动化Hexo博客的发布流程。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>之所以会有这篇文章，主要是因为Hexo自身的局限性。每次换一台新机子，都要重新安装Hexo的相关环境，烦得要死（虽然本身也不难吧）。而且Hexo本身似乎也不太支持直接Down现成项目用，每次都得init之类的流程重新跑一遍，烦死。</p>
+<p>然后正好想起来云服务器好久没用了，同时最近jenkins玩的也比较多，就起了邪恶的念头，为何不用Jenkins直接集成Hexo的发布呢？</p>
+<p>需要注意的是，本文所使用的Jenkins配置是基于windows的，其他的系统可能会有不同，当然这些不同诸位敢于使用其他系统的读者想必也是可以克服的。</p>
+<p>同时，此文章假定读者已经使用Hexo+GithubPages搭建过Blog。因此这方面的事儿不会细说。相关教程可以查看<a href="https://www.cnblogs.com/fengxiongZz/p/7707219.html" target="_blank" rel="noopener">这篇文章</a>。但需要注意的是在新版的Hexo中，有些设置已经跟这个文章中写的不一样了，详细不同可查看后文<strong>新版Hexo安装Tips</strong>部分。</p>
+<p>需要说明的是，这并不是一篇多么细致的教程文章，只是列出了大体步骤。</p>
+<h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><p>每次只需要在本地Down一份文章列表，不需要安装Hexo，Nodejs等。而用户只需要直接写文章并提交到Github，文章就会自动发布到Blog上。</p>
+<h2 id="所需条件"><a href="#所需条件" class="headerlink" title="所需条件"></a>所需条件</h2><ol>
+<li>云服务器一台（不需要太好，我用的腾讯云乞丐版windows服务器）</li>
+<li>云服务器安装Jenkins</li>
+<li>云服务器配置Hexo环境</li>
+<li>Git之类的玩意儿</li>
+</ol>
+<h2 id="集成步骤简要说明"><a href="#集成步骤简要说明" class="headerlink" title="集成步骤简要说明"></a>集成步骤简要说明</h2><p>将原有的GithubPages项目分一个分支出来，该分支单独存放文章目录（下文用source分支来代替该分支）。</p>
+<p>云服务器上配置好hexo的发布环境，jenkins将通过githubHook来检测source分支的push行为，检测到后将触发构建。</p>
+<p>构建的步骤为</p>
+<ol>
+<li>拉取source分支</li>
+<li>将source分支内的内容替换到Blog工程下的source文件夹内。</li>
+<li>对Blog工程执行Hexo 发布流程（hexo g hexo d）</li>
+</ol>
+<h2 id="具体步骤"><a href="#具体步骤" class="headerlink" title="具体步骤"></a>具体步骤</h2><h3 id="云服务器环境配置"><a href="#云服务器环境配置" class="headerlink" title="云服务器环境配置"></a>云服务器环境配置</h3><p>需要在云服务器上做如下几件事情：</p>
+<ul>
+<li style="list-style: none"><input type="checkbox"> 安装Jenkins</li>
+<li style="list-style: none"><input type="checkbox"> 配置Hexo环境</li>
+<li style="list-style: none"><input type="checkbox"> 安装Git</li>
+</ul>
+<h4 id="安装git"><a href="#安装git" class="headerlink" title="安装git"></a>安装git</h4><p>直接安就行了……只不过最好在安jenkins前安装，方便jenkins直接搜索git.exe（所以要记得在安的时候选中将git添加到系统环境变量）。记得在这步的时候<a href="https://www.cnblogs.com/chuyanfenfei/p/8035067.html" target="_blank" rel="noopener">配置对应github的ssh</a>备用。</p>
+<h4 id="安装Jenkins"><a href="#安装Jenkins" class="headerlink" title="安装Jenkins"></a>安装Jenkins</h4><p>首先去<a href="https://jenkins.io/" target="_blank" rel="noopener">jenkins官网</a>下载对应操作系统的jenkins安装文件，直接安装。这里我安在C:\Jenkins\目录下了。</p>
+<p>在安装后会在浏览器中弹出配置引导，没有的话可以试着访问localhost:8080。在配置引导中，除了简单的下一步外，有以下几点需要注意（不是按顺序排的，请读者自行对照）</p>
+<ul>
+<li>需要输入一个初始密码，这个密码的位置在配置引导中有提示，找到文件用记事本打开就行（注意这个初始密码文件会在引导结束后消失……）。</li>
+<li>设置网址时最好设置成127.0.0.1::8080而非他默认提供的localhost:8080.不这么设置似乎会有问题，看到别的博主说了一下。</li>
+<li>安装插件时最好直接按新手入门推荐的配置安装。笔者曾因自定义安装而导致无法运行批处理文件，浪费了三天时间。</li>
+<li>最好别跳过新建用户环节，否则后续要改admin密码或者输入初始密码，烦得很。</li>
+</ul>
+<p>OK，Jenkins应该就安好了。拿着云服务器的外网地址:8080访问一下，看到了jenkins登陆界面。Success！</p>
+<h4 id="配置Hexo环境"><a href="#配置Hexo环境" class="headerlink" title="配置Hexo环境"></a>配置Hexo环境</h4><p>介于看到这里的读者应该都配置过Hexo环境，这部分简单说一下（如果读者直接在云服务器上配置的Hexo环境，这段直接跳过）。</p>
+<p>找个地方新建一个文件夹用来放Blog工程文件。然后在对应的文件夹下Hexo Init，之后直接把原有的Hexo工程拷贝过来即可。注意还有一些东西要安装，见后文<strong>新版Hexo安装Tips</strong>部分。</p>
+<p>在这一步笔者意识到一件很有趣的事，那就是此时如果直接使用<code>hexo s</code>来启动服务器的话，你的Blog直接就在你的服务器上跑起来了。那只需要再简单的去买个域名，配置域名绑定到当前云服务器IP地址和端口就可以直接跳过GithubPages直接自己建Blog网站了。</p>
+<h3 id="博客工程配置"><a href="#博客工程配置" class="headerlink" title="博客工程配置"></a>博客工程配置</h3><p>Hexo通过读取Source文件和网站配置将整个网站渲染成静态页面并放置到Public文件夹中。这一步对应着<code>hexo g</code>生成操作。</p>
+<p>而在<code>hexo d</code>中，如果在hexo的<strong>config</strong>文件中配置的发布方式为github。那此时hexo会建立一个git项目目录然后把对应的git项目clone下来。下一步就是把生成的Public文件夹里的内容替换进git项目目录中，然后提交所有改动。</p>
+<p>同时需要知道，GithubPages上面放的其实就是纯粹的静态页面。所以一般如果直接Clone博客工程下来，是不包含外部那些hexo发布用的资源的。</p>
+<p>因此需要先把项目工程中的Source文件拷出来，然后切目录到.delopy_git中去创建一个新的分支(source)来专门存放原始的文章资源，或者直接在github上进行分支创建操作。</p>
+<p>于是此时项目是处于source分支上，将整个目录清空，然后拷入提前备份的source文件夹，提交并推送。</p>
+<p>在博客配置这里有一些需要注意的地方。首先注意yml配置文件中，所有的Key后面的某号后面都应该跟一个空格。<br>其次还有一个坑点。笔者最开始配置的发布方式如下<br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">git</span></span><br><span class="line"><span class="attr">  repo:</span> <span class="attr">https://xxxxx.github.io</span></span><br><span class="line"><span class="attr">  branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure></p>
+<p>因为笔者最开始是使用的https形式+输入用户名密码的方式进行发布，在cmd窗口中使用<code>hexo d</code>的方式去发布没遇到什么问题，但是后来在jenkins中使用同样的方式发布时会报错，参考了一些资料后改成了:</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">git</span></span><br><span class="line"><span class="attr">  repo:</span> <span class="string">git@github.com:xxx/xxx.github.io.git</span></span><br><span class="line"><span class="attr">  branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
+<p>也就是ssh的发布形式，成功运行。具体原因尚未明确。但因此就需要在本地设置对应的SSH证书（见下文）</p>
+<h3 id="github设置"><a href="#github设置" class="headerlink" title="github设置"></a>github设置</h3><p>需要做如下几件事儿</p>
+<ul>
+<li style="list-style: none"><input type="checkbox"> 配置githubWebhook</li>
+<li style="list-style: none"><input type="checkbox"> 配置github personal access tokens</li>
+</ul>
+<p>需要注意的是，在安装git的时候，github对应的ssh应该已经配置好了，没配置好的这时还需要去配置github ssh。</p>
+<h4 id="配置githubWebhook"><a href="#配置githubWebhook" class="headerlink" title="配置githubWebhook"></a>配置githubWebhook</h4><p>githubWebhook的作用主要是当有push或者pullrequest发送到github上的库时，github会向固定的网址发送一条请求来通知对方服务器push/pullrequest行为的发生。</p>
+<p>该功能其实是和jenkins的github Plugin配合实现的。这里先提前配置github端的配置。</p>
+<p>进入到需要配置Webhook的仓库，依次点击setting(仓库右上)-&gt;webhooks(左侧导航栏)-&gt;add webhook(页面右上)<br><img src="./1542899392487.png" alt="Alt text"></p>
+<p>然后就会进入如下图所示的github-webhook配置页面<br><img src="./1542942066248.png" alt="Alt text"></p>
+<p>其中，Payload url就是当相关事件发生时，github会发送请求的网址。由于需要和jenkins进行配合，因此需要填jenkins的webhook地址。当在后文jenkins配置完成后，jenkins中github plugin默认的通知网址为：jenkins外网地址（见jenkins配置）+/github-webhook/。比如jenkins对外访问使用的是<strong>192.168.0.1:8080</strong>这个地址，那这里填写应该是:<a href="http://192.168.0.1:8080/github-webhook" target="_blank" rel="noopener">http://192.168.0.1:8080/github-webhook</a></p>
+<h4 id="配置github-Personal-access-tokens"><a href="#配置github-Personal-access-tokens" class="headerlink" title="配置github Personal access tokens"></a>配置github Personal access tokens</h4><p>为了让jenkins能够登陆并访问github上的相关信息，需要配置github personal access tokens。同样，先配置github端。</p>
+<p>进入github，右上角用户头像-&gt;settings-&gt;左侧导航栏DeveloperSettings，点进去后左侧导航栏Personal access tokens。<br><img src="./1543153255756.png" alt="Alt text"></p>
+<p>在Personal access tokens页面点击右上角Genrate new token会转到创建token的页面。给token起个自己看的名字，然后底下权限部分选中<strong>repo和admin:repo_hook组。</strong>。然后拉到最底下点击生成按钮。<br><img src="./1543153435725.png" alt="Alt text"></p>
+<p>然后如下图显示，会跳转到Personal access tokens页面，同时显示一行字符串，请妥善保管此字符串。因为后续再也没有办法看到这个token对应的这个串了。<br><img src="./1543153543179.png" alt="Alt text"></p>
+<p>至此，github设置完毕。</p>
+<h3 id="Jenkins配置"><a href="#Jenkins配置" class="headerlink" title="Jenkins配置"></a>Jenkins配置</h3><p>jenkins是此篇文章中非常重要的环节。需要进行如下几个步骤的配置</p>
+<ul>
+<li style="list-style: none"><input type="checkbox"> 配置githubserver</li>
+<li style="list-style: none"><input type="checkbox"> 建立并配置项目</li>
+</ul>
+<h4 id="配置githubserver"><a href="#配置githubserver" class="headerlink" title="配置githubserver"></a>配置githubserver</h4><p>注意，这个配置项是建立在jenkins安装了github plugin的情况下出现的。如果没正常出现，可能和此插件安装状态有关。</p>
+<p>在jenkins首页左侧点击系统管理<br><img src="./1543155043774.png" alt="Alt text"></p>
+<p>点击系统设置<br><img src="./1543155080615.png" alt="Alt text"></p>
+<p>找到github相关设置，点击add server<br><img src="./1543155504268.png" alt="Alt text"></p>
+<p>名称随便写，APIURL不需要改动，在底下凭据那里，点击Add<br><img src="./1543155524450.png" alt="Alt text"></p>
+<p>类型选择Sercet Key，ID和描述都是描述信息，关键的是SercertKey，填入github配置中的Personal access tokens<br><img src="./1543156225410.png" alt="Alt text"></p>
+<p>确定后，在凭据部分选中刚刚创建的token，拉到页面最底下，点击保存。</p>
+<h4 id="配置项目"><a href="#配置项目" class="headerlink" title="配置项目"></a>配置项目</h4><p>点击左侧新建任务<br><img src="./1543156711986.png" alt="Alt text"></p>
+<p>选择<strong>构建一个自由风格的软件项目</strong>，输入项目名称，点击保存。<br><img src="./1543156774743.png" alt="Alt text"></p>
+<p>此时应处于jenkins首页，点击刚建立的任务。<br><img src="./1543156832678.png" alt="Alt text"></p>
+<p>选择左侧导航栏的配置选项<br><img src="./1543156853735.png" alt="Alt text"></p>
+<p>第一部分，勾选Github项目，填入githubpages对应的项目目录，地址形式为<strong><a href="https://github.com/xxxx/xxxx.github.io.git/" target="_blank" rel="noopener">https://github.com/xxxx/xxxx.github.io.git/</a></strong><br><img src="./1543156884019.png" alt="Alt text"></p>
+<p>第二部分，源码管理，选择git，Repositories部分填入githubpages对应的项目的SSH路径，形式如：<a href="mailto:**git@github.com" target="_blank" rel="noopener">**git@github.com</a>:xxxx/xxxx.github.io.git<strong>。底下Branch to build 填写为*</strong>/source**。也就是事先建好的源文件分支。<br><img src="./1543157410067.png" alt="Alt text"></p>
+<p>回到    Repositories部分，凭据右边点击Add，在弹出来的窗口中类型选中SSH User的那项，填写username。private key部分选中<strong>Enter directly</strong>，然后填写事先配置好的本机git的SSH<strong>私钥</strong>，也就是不带pub前缀的那个ssh文件里面的内容，全部复制粘贴过来。</p>
+<p>然后第三部分，构建触发器，选中<strong>GitHub hook trigger for GITScm polling</strong>，这会使得当jenkins收到上一步配置的那个仓库对应的分支的webhook事件时开始构建。<br><img src="./1543157661184.png" alt="Alt text"></p>
+<p>构建环境部分略过，直接跳到构建部分。点击增加构建步骤弹出如下窗口。选中执行windows批处理命令。<br><img src="./1543157708420.png" alt="Alt text"></p>
+<p>然后会弹出下图。<br><img src="./1543157871044.png" alt="Alt text"></p>
+<p>在空白区域填入如下代码。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.email <span class="string">"xxxx@xxx.com"</span></span><br><span class="line">git config --global user.name <span class="string">"xxxx"</span></span><br><span class="line">rmdir c:\Blog\<span class="built_in">source</span> /s/q</span><br><span class="line">xcopy %WORKSPACE%\<span class="built_in">source</span>\*.* c:\Blog\<span class="built_in">source</span>\ /s /y</span><br></pre></td></tr></table></figure></p>
+<p>其中头两条代码是设置了git的用户邮箱和用户名。由于不知道jenkins使用的是机器中哪个git（似乎是个独立环境），一开始时总是弹出要求设置git的用户信息，所以加入了这两行代码。</p>
+<p>第三四行是将一开始配置好的Blog项目中的source删掉并将jenkins获取到的source复制过去。之所以删掉而不用覆盖是考虑到可能会有删除某些文章的需求，因此最好完全按照github上source分支的状态更过去。涉及到的参数相关解释如下：</p>
+<ul>
+<li>rmdir 删除命令，主要指删除某个目录<ul>
+<li>/s 同时删除子目录及子目录下的文件</li>
+<li>/q 静默模式，不会询问是否确认</li>
+</ul>
+</li>
+<li>xcopy copy命令的扩展<ul>
+<li>/s 针对子目录及子目录下的文件进行操作</li>
+<li>/y 不会询问是否覆盖</li>
+</ul>
+</li>
+<li>%WORKSPACE% 使用jenkins中的WORKSPACE环境变量。也就是对应jenkins项目的工作目录。</li>
+</ul>
+<p>至此，source文件已被更新，下一步是进行hexo的生成及上传。理论上在windows批处理中也可以执行，但是这里笔者始终没有成功，怀疑跟cmd环境下hexo的配置有关。因此下一步在shell环境下进行。</p>
+<p>点击<strong>增加构建步骤</strong>，选中执行shell。填入代码<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /c/Blog</span><br><span class="line">hexo d -g</span><br></pre></td></tr></table></figure></p>
+<p>第一行命令将工作环境挪到Blog工程项目上。第二行直接调用<code>hexo d -g</code>，等同于先<code>hexo g</code>，再<code>hexo d</code>。</p>
+<p>点击保存，至此，jenkins配置完毕。下面开始测试。</p>
+<h2 id="测试阶段"><a href="#测试阶段" class="headerlink" title="测试阶段"></a>测试阶段</h2><h3 id="测试步骤"><a href="#测试步骤" class="headerlink" title="测试步骤"></a>测试步骤</h3><ol>
+<li>从GitHub上clone一份Blog项目Source分支下来（或者使用jenkins中的工程目录），添加一篇新的测试用文章，提交并推送。</li>
+<li>删除测试用文章，提交并推送。</li>
+</ol>
+<h3 id="GitHubWebhook部分"><a href="#GitHubWebhook部分" class="headerlink" title="GitHubWebhook部分"></a>GitHubWebhook部分</h3><p>若在推送完若干秒后，对应的jenkins项目开始构建，则GitHubWebhook测试通过。也可在GitHub上Blog项目的setting/webhooks中查看之前配置的Webhook状态。有对勾说明事件发送成功。<br><img src="./1543203132064.png" alt="Alt text"></p>
+<h3 id="jenkins源码管理部分"><a href="#jenkins源码管理部分" class="headerlink" title="jenkins源码管理部分"></a>jenkins源码管理部分</h3><p>在项目左下角构建历史中，点击最新构建记录右侧的小三角，选择控制台输出，进入日志界面。<br><img src="./1543203360286.png" alt="Alt text"></p>
+<p>阅读日志查看有无报错，或者在构建完毕后查看<strong>工作区</strong>中的文件是否拉取到最新版本。<br><img src="./1543203443297.png" alt="Alt text"></p>
+<h3 id="jenkins构建步骤-windows批处理部分"><a href="#jenkins构建步骤-windows批处理部分" class="headerlink" title="jenkins构建步骤-windows批处理部分"></a>jenkins构建步骤-windows批处理部分</h3><p>查看Blog工程中source文件夹内有无对应最新变动。有则说明测试通过。</p>
+<h3 id="jenkins构建步骤-shell部分"><a href="#jenkins构建步骤-shell部分" class="headerlink" title="jenkins构建步骤-shell部分"></a>jenkins构建步骤-shell部分</h3><p>查看控制台日志输出有无<code>hexo d -g</code>命令相关及报错。</p>
+<h3 id="整体测试部分"><a href="#整体测试部分" class="headerlink" title="整体测试部分"></a>整体测试部分</h3><p>测试步骤1走完后，等待若干时间后通过网址访问Blog，查看最新的测试文章是否正常添加。</p>
+<p>测试步骤2走完后，等待若干时间后通过网址访问Blog，查看最新的测试文章是否正常删除。</p>
+<h3 id="Debug及可能会出现的问题"><a href="#Debug及可能会出现的问题" class="headerlink" title="Debug及可能会出现的问题"></a>Debug及可能会出现的问题</h3><p>可通过控制台日志去确定本次构建出现的问题点。<br>最有可能遇到的问题是在windows下的jenkins里shell无法执行。一般是因为找不到shell的运行环境。通常jenkins会自己寻找sh程序，但有时会失效。此时应该在jenkins系统设置里找到shell配置的项。将值填写为git中的sh.exe（或其他已建立好的shell环境）<br> <img src="./1543215716351.png" alt="Alt text"></p>
+<h2 id="新版Hexo安装Tips"><a href="#新版Hexo安装Tips" class="headerlink" title="新版Hexo安装Tips"></a>新版Hexo安装Tips</h2><p>在Hexo3.0之后，服务器变成了独立的模块不会默认提供。因此想在本地跑hexoServer的话，需要执行以下语句来安装hexo-server模块</p>
+<pre><code>npm install hexo-server –save
+</code></pre><h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>用这套系统某种意义上有一些杀鸡用牛刀，但是程序员最关键的就是折腾。折腾才是第一生产力啊。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/jenkins/" rel="tag"># jenkins</a>
+          
+            <a href="/tags/持续集成/" rel="tag"># 持续集成</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/19/Jenkins-chinese-encode-error/" rel="next" title="Jenkins控制台中文乱码问题">
+                <i class="fa fa-chevron-left"></i> Jenkins控制台中文乱码问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Wolf_sk1</p>
+              <p class="site-description motion-element" itemprop="description">把做出一款让周围人都喜欢的游戏当成一切的起点和现阶段的目标并为之努力。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wolfsk1" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="j13015252122@126.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://cowlevel.net/people/wolf_sk1" target="_blank" title="奶牛关">
+                      
+                        <i class="fa fa-fw fa-gamepad"></i>奶牛关</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#目标"><span class="nav-number">2.</span> <span class="nav-text">目标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#所需条件"><span class="nav-number">3.</span> <span class="nav-text">所需条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集成步骤简要说明"><span class="nav-number">4.</span> <span class="nav-text">集成步骤简要说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#具体步骤"><span class="nav-number">5.</span> <span class="nav-text">具体步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#云服务器环境配置"><span class="nav-number">5.1.</span> <span class="nav-text">云服务器环境配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装git"><span class="nav-number">5.1.1.</span> <span class="nav-text">安装git</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装Jenkins"><span class="nav-number">5.1.2.</span> <span class="nav-text">安装Jenkins</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置Hexo环境"><span class="nav-number">5.1.3.</span> <span class="nav-text">配置Hexo环境</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#博客工程配置"><span class="nav-number">5.2.</span> <span class="nav-text">博客工程配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#github设置"><span class="nav-number">5.3.</span> <span class="nav-text">github设置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#配置githubWebhook"><span class="nav-number">5.3.1.</span> <span class="nav-text">配置githubWebhook</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置github-Personal-access-tokens"><span class="nav-number">5.3.2.</span> <span class="nav-text">配置github Personal access tokens</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Jenkins配置"><span class="nav-number">5.4.</span> <span class="nav-text">Jenkins配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#配置githubserver"><span class="nav-number">5.4.1.</span> <span class="nav-text">配置githubserver</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置项目"><span class="nav-number">5.4.2.</span> <span class="nav-text">配置项目</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试阶段"><span class="nav-number">6.</span> <span class="nav-text">测试阶段</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#测试步骤"><span class="nav-number">6.1.</span> <span class="nav-text">测试步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GitHubWebhook部分"><span class="nav-number">6.2.</span> <span class="nav-text">GitHubWebhook部分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jenkins源码管理部分"><span class="nav-number">6.3.</span> <span class="nav-text">jenkins源码管理部分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jenkins构建步骤-windows批处理部分"><span class="nav-number">6.4.</span> <span class="nav-text">jenkins构建步骤-windows批处理部分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jenkins构建步骤-shell部分"><span class="nav-number">6.5.</span> <span class="nav-text">jenkins构建步骤-shell部分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#整体测试部分"><span class="nav-number">6.6.</span> <span class="nav-text">整体测试部分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Debug及可能会出现的问题"><span class="nav-number">6.7.</span> <span class="nav-text">Debug及可能会出现的问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新版Hexo安装Tips"><span class="nav-number">7.</span> <span class="nav-text">新版Hexo安装Tips</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结语"><span class="nav-number">8.</span> <span class="nav-text">结语</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wolf_sk1</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
