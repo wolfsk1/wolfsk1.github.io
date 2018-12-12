@@ -90,7 +90,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/12/12/decimal-point-about/1544533061866.png">
 <meta property="og:image" content="http://yoursite.com/2018/12/12/decimal-point-about/1544585007965.png">
 <meta property="og:image" content="http://yoursite.com/2018/12/12/decimal-point-about/1544534151908.png">
-<meta property="og:updated_time" content="2018-12-12T06:26:18.620Z">
+<meta property="og:updated_time" content="2018-12-12T06:46:01.651Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="小数点的那些事儿">
 <meta name="twitter:description" content="这篇文章将会解释浮点数的原理以及计算机无法精准表达小数的原因以及解决办法。">
@@ -810,7 +810,7 @@
   
 
 
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
 
 
 
@@ -863,6 +863,28 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
 
   
 
