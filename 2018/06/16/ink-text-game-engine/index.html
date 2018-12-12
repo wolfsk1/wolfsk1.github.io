@@ -389,7 +389,7 @@
 <h2 id="第一部分：基础语法"><a href="#第一部分：基础语法" class="headerlink" title="第一部分：基础语法"></a>第一部分：基础语法</h2><h3 id="1-内容-Content"><a href="#1-内容-Content" class="headerlink" title="1) 内容-Content"></a>1) 内容-<em>Content</em></h3><p>内容其实就是最简单的文字，编辑器会将内容原封不动的展现。</p>
 <p>同时，ink允许用户添加注释。</p>
 <p>示例如下：<br><img src="./1481557024951.png" alt="Alt text"></p>
-<h3 id="2-选择-Choices"><a href="#2-选择-Choices" class="headerlink" title="2)选择-Choices"></a>2)选择-<em>Choices</em></h3><p>一个简单的选择就是* 后面跟选项，然后接着写对应选项的内容。直到遇到<strong>跳转符号</strong>或者另一个选项或者结尾。</p>
+<h3 id="2-选择-Choices"><a href="#2-选择-Choices" class="headerlink" title="2)选择-Choices"></a>2)选择-<em>Choices</em></h3><p>一个简单的选择就是<em> 后面跟选项，然后接着写对应选项的内容。直到遇到<em>*跳转符号</em></em>或者另一个选项或者结尾。</p>
 <p>示例如下，选择前：<br><img src="./1481557536986.png" alt="Alt text"><br>选择走右边之后：<br><img src="./1481557557827.png" alt="Alt text"></p>
 <p>由于选择的截图稍微难截一些，后续我会使用</p>
 <blockquote>
@@ -400,7 +400,7 @@
 <p>1&gt;走左边的结果</p>
 </blockquote>
 <p>来代替我的选择以及对应显示的文字。</p>
-<h3 id="3-节点-Knots-knots"><a href="#3-节点-Knots-knots" class="headerlink" title="3)节点-Knots^knots"></a>3)节点-<em>Knots</em><a href="其实在英文原意中，knots是绳结的意思。在ink通篇的形容中，ink本意是将这些概念转换为与编织物相似的概念。由于个人功力不够，无法正确翻译。见谅，">^knots</a></h3><p>节点是一整段的文字内容，他可以被其他的内容引用或者跳转。<br>节点的声明格式如下</p>
+<h3 id="3-节点-Knotsknots"><a href="#3-节点-Knotsknots" class="headerlink" title="3)节点-Knotsknots"></a>3)节点-<em>Knots</em><sup><a href="#fn_knots" id="reffn_knots">knots</a></sup></h3><p>节点是一整段的文字内容，他可以被其他的内容引用或者跳转。<br>节点的声明格式如下</p>
 <blockquote>
 <p>=== 节点名称， 由字母数字下划线组成 ===</p>
 </blockquote>
@@ -433,11 +433,11 @@
 <p>这样的写法。最终显示结果为:</p>
 <blockquote>
 <p>我必须跳转到stop_here,否则文本流会被阻碍同时节点在定义的时候不会显示同时会阻碍文本流…………</p>
-</blockquote>
 <h3 id="5-分流-Branching-The-Flow"><a href="#5-分流-Branching-The-Flow" class="headerlink" title="5)分流-Branching The Flow"></a>5)分流-<em>Branching The Flow</em></h3><p>分流实际上并没有语法规定，他是一种<strong>逻辑概念</strong>。主要是指<strong>从一个节点通过选择跳转到若干节点的行为</strong>。</p>
+</blockquote>
 <p>节点和跳转组合起来形成最基础的故事流，这是一种较为扁平的结构。剧本作者可以直接单拉某一个节点或者某一段故事流出来编写而不用担心结构过于混乱，或者需要追踪某一分支的状态。</p>
 <p>常见的ink脚本从第一个节点开始，顺着拥有着各种分支的庞大故事流走向最终的end节点。</p>
-<h3 id="6-导入和子节点-Includes-and-Stitches-stitches"><a href="#6-导入和子节点-Includes-and-Stitches-stitches" class="headerlink" title="6)导入和子节点-Includes and Stitches^stitches"></a>6)导入和子节点-<em>Includes and Stitches</em><a href="同样的，stitches在英文中应译为缝补，应该是与knots相对应的概念，但是我个人仍然没办法给出准确的翻译。只能选择概念正确的词语去翻译。">^stitches</a></h3><p>节点实际上可以被细分，细分出来的就是子节点。而任何子节点都应该具有唯一的名字(名字应该有字母数字以及下划线组成)以便被引用。</p>
+<h3 id="6-导入和子节点-Includes-and-Stitchesstitches"><a href="#6-导入和子节点-Includes-and-Stitchesstitches" class="headerlink" title="6)导入和子节点-Includes and Stitchesstitches"></a>6)导入和子节点-<em>Includes and Stitches</em><sup><a href="#fn_stitches" id="reffn_stitches">stitches</a></sup></h3><p>节点实际上可以被细分，细分出来的就是子节点。而任何子节点都应该具有唯一的名字(名字应该有字母数字以及下划线组成)以便被引用。</p>
 <p>子节点的声明方式是在父节点内用<strong>= 子节点名称</strong>来声明，示例如下:</p>
 <blockquote>
 <p>=== 一个父节点 ===<br>父节点的内容反而会被忽略<br>= 第一个子节点<br>直接跳转到父节点而不指定子节点名将默认显示第一个子节点<br>= 第二个子节点<br>第二内容用来示范节点内跳转-&gt;将会被引用子节点<br>= 将会被引用子节点<br>一些不是废话的内容 </p>
@@ -518,17 +518,9 @@
 <p>循环访问节点，将出现如下显示</p>
 <blockquote>
 <p>访问次数：1<br>这是我第一次访问这个节点</p>
-</blockquote>
-<blockquote>
 <p>访问次数：2<br>这是我第二次访问这个节点</p>
-</blockquote>
-<blockquote>
 <p>访问次数：3<br>这是我第三次访问这个节点</p>
-</blockquote>
-<blockquote>
 <p>访问次数：4<br>这是我第N次访问这个节点</p>
-</blockquote>
-<blockquote>
 <p>访问次数：5<br>这是我第N次访问这个节点</p>
 </blockquote>
 <p>第五次的时候，访问的次数超过了列表内元素的数量，因此将不断显示列表最后一个元素。</p>
@@ -585,7 +577,7 @@
 <blockquote>
 <p>* {TURNS_SINCE(-&gt; test_knots) &gt; 2} 这个选项的显示条件是在玩家访问了test_knots这个节点后，又访问了至少三个其他节点。 </p>
 </blockquote>
-<h2 id="第二部分：编排-weave"><a href="#第二部分：编排-weave" class="headerlink" title="第二部分：编排^weave"></a>第二部分：编排<a href="原文为weave">^weave</a></h2><h3 id="1-聚合"><a href="#1-聚合" class="headerlink" title="1)聚合"></a>1)聚合</h3><p>聚合可以使得因为选择而分开的故事流重新聚拢起来。<br>声明方式是在语句前加符号”-“，使用示例如下：</p>
+<h2 id="第二部分：编排weave"><a href="#第二部分：编排weave" class="headerlink" title="第二部分：编排weave"></a>第二部分：编排<sup><a href="#fn_weave" id="reffn_weave">weave</a></sup></h2><h3 id="1-聚合"><a href="#1-聚合" class="headerlink" title="1)聚合"></a>1)聚合</h3><p>聚合可以使得因为选择而分开的故事流重新聚拢起来。<br>声明方式是在语句前加符号”-“，使用示例如下：</p>
 <blockquote>
 <p>“你刚才说什么？”妈妈疑惑的问我。<br>* “额……没什么……”<br>* “算了你当我没说”<br>- “好，那我们赶紧出门去叔叔家。”<br>* “啊，好吧，说实话，我刚才说的是我并不想去叔叔家。”<br>* “但我其实真的不太想去叔叔家。”<br>- “不管你想不想去，你今天必须得去！”</p>
 </blockquote>
@@ -893,7 +885,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第一部分：基础语法"><span class="nav-number">2.</span> <span class="nav-text">第一部分：基础语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-内容-Content"><span class="nav-number">2.1.</span> <span class="nav-text">1) 内容-Content</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-选择-Choices"><span class="nav-number">2.2.</span> <span class="nav-text">2)选择-Choices</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-节点-Knots-knots"><span class="nav-number">2.3.</span> <span class="nav-text">3)节点-Knots^knots</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-跳转-Diverts"><span class="nav-number">2.4.</span> <span class="nav-text">4)跳转-Diverts</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-分流-Branching-The-Flow"><span class="nav-number">2.5.</span> <span class="nav-text">5)分流-Branching The Flow</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-导入和子节点-Includes-and-Stitches-stitches"><span class="nav-number">2.6.</span> <span class="nav-text">6)导入和子节点-Includes and Stitches^stitches</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-不同类型的选择-Varying-Choices"><span class="nav-number">2.7.</span> <span class="nav-text">8)不同类型的选择 - Varying Choices</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#后备选项-FallbackChoice"><span class="nav-number">2.7.1.</span> <span class="nav-text">后备选项 - FallbackChoice</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#粘性选择-Sticky-choices"><span class="nav-number">2.7.2.</span> <span class="nav-text">粘性选择 - Sticky choices</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#条件选择"><span class="nav-number">2.7.3.</span> <span class="nav-text">条件选择</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-变量文本"><span class="nav-number">2.8.</span> <span class="nav-text">9)变量文本</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#列表文本"><span class="nav-number">2.8.1.</span> <span class="nav-text">列表文本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#条件文本"><span class="nav-number">2.8.2.</span> <span class="nav-text">条件文本</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-游戏查询-Game-Queries"><span class="nav-number">2.9.</span> <span class="nav-text">10)游戏查询 - Game Queries</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CHOICE-COUNT"><span class="nav-number">2.9.1.</span> <span class="nav-text">CHOICE_COUNT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TURNS-SINCE"><span class="nav-number">2.9.2.</span> <span class="nav-text">TURNS_SINCE</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二部分：编排-weave"><span class="nav-number">3.</span> <span class="nav-text">第二部分：编排^weave</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-聚合"><span class="nav-number">3.1.</span> <span class="nav-text">1)聚合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-嵌套流"><span class="nav-number">3.2.</span> <span class="nav-text">2)嵌套流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-编排导航"><span class="nav-number">3.3.</span> <span class="nav-text">3)编排导航</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第三部分：变量与逻辑"><span class="nav-number">4.</span> <span class="nav-text">第三部分：变量与逻辑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-全局变量"><span class="nav-number">4.1.</span> <span class="nav-text">1)全局变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-逻辑"><span class="nav-number">4.2.</span> <span class="nav-text">2)逻辑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-条件块-if-else"><span class="nav-number">4.3.</span> <span class="nav-text">3)条件块(if/else)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-临时变量"><span class="nav-number">4.4.</span> <span class="nav-text">4)临时变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-函数"><span class="nav-number">4.5.</span> <span class="nav-text">5)函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-常量"><span class="nav-number">4.6.</span> <span class="nav-text">6)常量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-游戏端逻辑"><span class="nav-number">4.7.</span> <span class="nav-text">7)游戏端逻辑</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#尾声：未完待续"><span class="nav-number">5.</span> <span class="nav-text">尾声：未完待续</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第一部分：基础语法"><span class="nav-number">2.</span> <span class="nav-text">第一部分：基础语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-内容-Content"><span class="nav-number">2.1.</span> <span class="nav-text">1) 内容-Content</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-选择-Choices"><span class="nav-number">2.2.</span> <span class="nav-text">2)选择-Choices</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-节点-Knotsknots"><span class="nav-number">2.3.</span> <span class="nav-text">3)节点-Knotsknots</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-跳转-Diverts"><span class="nav-number">2.4.</span> <span class="nav-text">4)跳转-Diverts</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-分流-Branching-The-Flow"><span class="nav-number">2.5.</span> <span class="nav-text">5)分流-Branching The Flow</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-导入和子节点-Includes-and-Stitchesstitches"><span class="nav-number">2.6.</span> <span class="nav-text">6)导入和子节点-Includes and Stitchesstitches</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-不同类型的选择-Varying-Choices"><span class="nav-number">2.7.</span> <span class="nav-text">8)不同类型的选择 - Varying Choices</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#后备选项-FallbackChoice"><span class="nav-number">2.7.1.</span> <span class="nav-text">后备选项 - FallbackChoice</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#粘性选择-Sticky-choices"><span class="nav-number">2.7.2.</span> <span class="nav-text">粘性选择 - Sticky choices</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#条件选择"><span class="nav-number">2.7.3.</span> <span class="nav-text">条件选择</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-变量文本"><span class="nav-number">2.8.</span> <span class="nav-text">9)变量文本</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#列表文本"><span class="nav-number">2.8.1.</span> <span class="nav-text">列表文本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#条件文本"><span class="nav-number">2.8.2.</span> <span class="nav-text">条件文本</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-游戏查询-Game-Queries"><span class="nav-number">2.9.</span> <span class="nav-text">10)游戏查询 - Game Queries</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CHOICE-COUNT"><span class="nav-number">2.9.1.</span> <span class="nav-text">CHOICE_COUNT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TURNS-SINCE"><span class="nav-number">2.9.2.</span> <span class="nav-text">TURNS_SINCE</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二部分：编排weave"><span class="nav-number">3.</span> <span class="nav-text">第二部分：编排weave</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-聚合"><span class="nav-number">3.1.</span> <span class="nav-text">1)聚合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-嵌套流"><span class="nav-number">3.2.</span> <span class="nav-text">2)嵌套流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-编排导航"><span class="nav-number">3.3.</span> <span class="nav-text">3)编排导航</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第三部分：变量与逻辑"><span class="nav-number">4.</span> <span class="nav-text">第三部分：变量与逻辑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-全局变量"><span class="nav-number">4.1.</span> <span class="nav-text">1)全局变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-逻辑"><span class="nav-number">4.2.</span> <span class="nav-text">2)逻辑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-条件块-if-else"><span class="nav-number">4.3.</span> <span class="nav-text">3)条件块(if/else)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-临时变量"><span class="nav-number">4.4.</span> <span class="nav-text">4)临时变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-函数"><span class="nav-number">4.5.</span> <span class="nav-text">5)函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-常量"><span class="nav-number">4.6.</span> <span class="nav-text">6)常量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-游戏端逻辑"><span class="nav-number">4.7.</span> <span class="nav-text">7)游戏端逻辑</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#尾声：未完待续"><span class="nav-number">5.</span> <span class="nav-text">尾声：未完待续</span></a></li></ol></div>
             
 
           </div>
@@ -1112,7 +1104,24 @@
         }
       });
     </script>
-    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
   
 
 

@@ -379,7 +379,7 @@
 </li>
 </ol>
 <p>其中第一行是设置临时系统变量，只在当前命令行窗口中生效。第二行官方的解释是设置活动代码页的编号，个人理解就是设置字符集，65001是UTF-8的字符集。这就解决了命令行窗口使用GBK编码显示的乱码问题。同样的，第二行指令也是在当前命令行窗口中生效，不会影响外部。</p>
-<ol start="3">
+<ol>
 <li>由于问题发生的时候jenkins的运行方式为war包方式，此方法尚未尝试。而直接通过.msi文件安装的（也就是有安装目录）jenkins可以试一下此方法。在Jenkins安装目录下找到<strong>jenkins.xml</strong>文件，在&lt;arguments&gt; ……&lt;/arguments&gt;中添加<strong>-Difile.encoding=utf-8</strong>。</li>
 </ol>
 <h2 id="问题总结"><a href="#问题总结" class="headerlink" title="问题总结"></a>问题总结</h2><p>本质上这个问题是JVM对FileEncoding的方式问题。</p>
@@ -800,7 +800,24 @@
         }
       });
     </script>
-    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
   
 
 

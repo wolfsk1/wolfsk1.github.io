@@ -412,9 +412,9 @@
 </ol>
 <h2 id="具体步骤"><a href="#具体步骤" class="headerlink" title="具体步骤"></a>具体步骤</h2><h3 id="云服务器环境配置"><a href="#云服务器环境配置" class="headerlink" title="云服务器环境配置"></a>云服务器环境配置</h3><p>需要在云服务器上做如下几件事情：</p>
 <ul>
-<li style="list-style: none"><input type="checkbox"> 安装Jenkins</li>
-<li style="list-style: none"><input type="checkbox"> 配置Hexo环境</li>
-<li style="list-style: none"><input type="checkbox"> 安装Git</li>
+<li>[ ] 安装Jenkins</li>
+<li>[ ] 配置Hexo环境</li>
+<li>[ ] 安装Git</li>
 </ul>
 <h4 id="安装git"><a href="#安装git" class="headerlink" title="安装git"></a>安装git</h4><p>直接安就行了……只不过最好在安jenkins前安装，方便jenkins直接搜索git.exe（所以要记得在安的时候选中将git添加到系统环境变量）。记得在这步的时候<a href="https://www.cnblogs.com/chuyanfenfei/p/8035067.html" target="_blank" rel="noopener">配置对应github的ssh</a>备用。</p>
 <h4 id="安装Jenkins"><a href="#安装Jenkins" class="headerlink" title="安装Jenkins"></a>安装Jenkins</h4><p>首先去<a href="https://jenkins.io/" target="_blank" rel="noopener">jenkins官网</a>下载对应操作系统的jenkins安装文件，直接安装。这里我安在C:\Jenkins\目录下了。</p>
@@ -440,8 +440,8 @@
 <p>也就是ssh的发布形式，成功运行。具体原因尚未明确。但因此就需要在本地设置对应的SSH证书（见下文）</p>
 <h3 id="github设置"><a href="#github设置" class="headerlink" title="github设置"></a>github设置</h3><p>需要做如下几件事儿</p>
 <ul>
-<li style="list-style: none"><input type="checkbox"> 配置githubWebhook</li>
-<li style="list-style: none"><input type="checkbox"> 配置github personal access tokens</li>
+<li>[ ] 配置githubWebhook</li>
+<li>[ ] 配置github personal access tokens</li>
 </ul>
 <p>需要注意的是，在安装git的时候，github对应的ssh应该已经配置好了，没配置好的这时还需要去配置github ssh。</p>
 <h4 id="配置githubWebhook"><a href="#配置githubWebhook" class="headerlink" title="配置githubWebhook"></a>配置githubWebhook</h4><p>githubWebhook的作用主要是当有push或者pullrequest发送到github上的库时，github会向固定的网址发送一条请求来通知对方服务器push/pullrequest行为的发生。</p>
@@ -456,8 +456,8 @@
 <p>至此，github设置完毕。</p>
 <h3 id="Jenkins配置"><a href="#Jenkins配置" class="headerlink" title="Jenkins配置"></a>Jenkins配置</h3><p>jenkins是此篇文章中非常重要的环节。需要进行如下几个步骤的配置</p>
 <ul>
-<li style="list-style: none"><input type="checkbox"> 配置githubserver</li>
-<li style="list-style: none"><input type="checkbox"> 建立并配置项目</li>
+<li>[ ] 配置githubserver</li>
+<li>[ ] 建立并配置项目</li>
 </ul>
 <h4 id="配置githubserver"><a href="#配置githubserver" class="headerlink" title="配置githubserver"></a>配置githubserver</h4><p>注意，这个配置项是建立在jenkins安装了github plugin的情况下出现的。如果没正常出现，可能和此插件安装状态有关。</p>
 <p>在jenkins首页左侧点击系统管理<br><img src="./1543155043774.png" alt="Alt text"></p>
@@ -471,7 +471,7 @@
 <p>此时应处于jenkins首页，点击刚建立的任务。<br><img src="./1543156832678.png" alt="Alt text"></p>
 <p>选择左侧导航栏的配置选项<br><img src="./1543156853735.png" alt="Alt text"></p>
 <p>第一部分，勾选Github项目，填入githubpages对应的项目目录，地址形式为<strong><a href="https://github.com/xxxx/xxxx.github.io.git/" target="_blank" rel="noopener">https://github.com/xxxx/xxxx.github.io.git/</a></strong><br><img src="./1543156884019.png" alt="Alt text"></p>
-<p>第二部分，源码管理，选择git，Repositories部分填入githubpages对应的项目的SSH路径，形式如：<a href="mailto:**git@github.com" target="_blank" rel="noopener">**git@github.com</a>:xxxx/xxxx.github.io.git<strong>。底下Branch to build 填写为*</strong>/source**。也就是事先建好的源文件分支。<br><img src="./1543157410067.png" alt="Alt text"></p>
+<p>第二部分，源码管理，选择git，Repositories部分填入githubpages对应的项目的SSH路径，形式如：<strong>git@github.com:xxxx/xxxx.github.io.git</strong>。底下Branch to build 填写为<strong>*/source</strong>。也就是事先建好的源文件分支。<br><img src="./1543157410067.png" alt="Alt text"></p>
 <p>回到    Repositories部分，凭据右边点击Add，在弹出来的窗口中类型选中SSH User的那项，填写username。private key部分选中<strong>Enter directly</strong>，然后填写事先配置好的本机git的SSH<strong>私钥</strong>，也就是不带pub前缀的那个ssh文件里面的内容，全部复制粘贴过来。</p>
 <p>然后第三部分，构建触发器，选中<strong>GitHub hook trigger for GITScm polling</strong>，这会使得当jenkins收到上一步配置的那个仓库对应的分支的webhook事件时开始构建。<br><img src="./1543157661184.png" alt="Alt text"></p>
 <p>构建环境部分略过，直接跳到构建部分。点击增加构建步骤弹出如下窗口。选中执行windows批处理命令。<br><img src="./1543157708420.png" alt="Alt text"></p>
@@ -928,7 +928,24 @@
         }
       });
     </script>
-    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
   
 
 

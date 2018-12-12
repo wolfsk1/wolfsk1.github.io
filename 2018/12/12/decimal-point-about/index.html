@@ -420,6 +420,7 @@
 <p>令110.001的小数点左移两位，可表示为$1.10001*2^2$。</p>
 <p>因此符号位为0，尾数部分为10001，指数部分取float的指数偏移，也就是127作为参数，则可得E-127=2，E=129，转二进制也就是1000001。</p>
 <p>所以6.125采用单精度float类型浮点数，最后在计算机中的二进制结果应该是：</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -436,12 +437,14 @@
 </tr>
 </tbody>
 </table>
+</div>
 <p>其中加粗部分为补的0。</p>
 <p>大家可以注意到，在IEEE规定中有个隐含位的概念，隐含位主要是指转换成公式化的表现形式后，$±1.f*2^{E−127}$这个公式中最前面那个1。这就是隐含位。因此所有有隐含位的数字类型，都应该将小数点移动到可令整数部分为1的地方。举个简单的例子。</p>
 <p>0.5(10) = 0.1(2) = $1.0*2^{-1}$ 这里是将小数点右移了一位，好使整数部分为1。</p>
 <p>因此可以看到有隐含位的浮点类型通常有效位数会比尾数位数多一位。</p>
 <p>刚才提到了有效位数，有效位数就是计算机可表达的位数。超出有效位数的部分在浮点数这种表达方式中会被舍去。比如上文中说到的0.58，我们来看一下0.58转浮点数的过程</p>
 <p>0.58(10) = 0.10010011101011100….(2) 循环部分为0010011101011100这组数据。若用float，也就是32位单精度浮点来表示的话，尾数部分只能取到23位，23位后的将被丢弃。也就是1.00100111010111000010011<strong>101011100…</strong>，加粗部分为会被丢弃的尾数。所以实际的表示将会是$1.00100111010111000010011*2^{-1}$，最终在计算机中的二进制表示如下表</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -458,6 +461,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <p>但需要注意的是，此时这个数字并不等于0.58，他只是对于0.58的近似。浮点数也并没有解决这个问题，只是简单粗暴的丢弃了无法表示的部分。这就是为什么0.58赋值后在调试中查看对应的值会变为0.579999999999999999993类似这种形式数字的原因。</p>
 <p>额外提一下，定点数也无法准确表示小数，定点数只不过是将32位人工的切分开，做好约定。如约定前16位是整数，后16位是小数这样。由于最终仍采用二进制位存储，因此仍然无法准确的表示小数。</p>
 <h2 id="精确的小数表示-Decimal"><a href="#精确的小数表示-Decimal" class="headerlink" title="精确的小数表示 Decimal"></a>精确的小数表示 Decimal</h2><p>通常来说我们不用太关心浮点数小数点后十几位的数据，直接四舍五入也可以解决。但是在财务计算中，任何的误差都是不被容忍的。所以我们仍需解决小数的精确表示问题。而根据前文可得出，之所以会出现无法精确表示的问题，主要是因为我们试图将小数转换为二进制之后再存储。</p>
@@ -882,7 +886,24 @@
         }
       });
     </script>
-    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
   
 
 
