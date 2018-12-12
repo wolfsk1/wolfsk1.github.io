@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="jenkins,持续集成,">
+  <meta name="keywords" content="基础原理,">
 
 
 
@@ -79,18 +79,22 @@
 
 
 
-<meta name="description" content="这篇文章主要描述了Jenkins中控制台输出也就是构建日志中出现中文乱码的解决方法与相关分析。">
-<meta name="keywords" content="jenkins,持续集成">
+<meta name="description" content="这篇文章将会解释浮点数的原理以及计算机无法精准表达小数的原因以及解决办法。">
+<meta name="keywords" content="基础原理">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Jenkins控制台中文乱码问题">
-<meta property="og:url" content="http://yoursite.com/2018/11/19/Jenkins-chinese-encode-error/index.html">
+<meta property="og:title" content="小数点的那些事儿">
+<meta property="og:url" content="http://yoursite.com/2018/12/12/decimal-point-about/index.html">
 <meta property="og:site_name" content="Code-Game-Dream">
-<meta property="og:description" content="这篇文章主要描述了Jenkins中控制台输出也就是构建日志中出现中文乱码的解决方法与相关分析。">
+<meta property="og:description" content="这篇文章将会解释浮点数的原理以及计算机无法精准表达小数的原因以及解决办法。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-22T13:14:34.627Z">
+<meta property="og:image" content="http://yoursite.com/2018/12/12/decimal-point-about/1544533061866.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/12/decimal-point-about/1544585007965.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/12/decimal-point-about/1544534151908.png">
+<meta property="og:updated_time" content="2018-12-12T06:26:18.620Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Jenkins控制台中文乱码问题">
-<meta name="twitter:description" content="这篇文章主要描述了Jenkins中控制台输出也就是构建日志中出现中文乱码的解决方法与相关分析。">
+<meta name="twitter:title" content="小数点的那些事儿">
+<meta name="twitter:description" content="这篇文章将会解释浮点数的原理以及计算机无法精准表达小数的原因以及解决办法。">
+<meta name="twitter:image" content="http://yoursite.com/2018/12/12/decimal-point-about/1544533061866.png">
 
 
 
@@ -120,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/11/19/Jenkins-chinese-encode-error/">
+  <link rel="canonical" href="http://yoursite.com/2018/12/12/decimal-point-about/">
 
 
 
 
 
-  <title>Jenkins控制台中文乱码问题 | Code-Game-Dream</title>
+  <title>小数点的那些事儿 | Code-Game-Dream</title>
   
 
 
@@ -273,7 +277,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/19/Jenkins-chinese-encode-error/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/12/decimal-point-about/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wolf_sk1">
@@ -290,7 +294,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Jenkins控制台中文乱码问题</h1>
+          <h1 class="post-title" itemprop="name headline">小数点的那些事儿</h1>
         
 
         <div class="post-meta">
@@ -302,8 +306,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-19T18:26:32+08:00">
-                2018-11-19
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-12T14:30:00+08:00">
+                2018-12-12
               </time>
             
 
@@ -325,8 +329,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/问题分析/" itemprop="url" rel="index">
-                    <span itemprop="name">问题分析</span>
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
                   </a>
                 </span>
 
@@ -349,7 +353,7 @@
 
           
               <div class="post-description">
-                  这篇文章主要描述了Jenkins中控制台输出也就是构建日志中出现中文乱码的解决方法与相关分析。
+                  这篇文章将会解释浮点数的原理以及计算机无法精准表达小数的原因以及解决办法。
               </div>
           
 
@@ -366,23 +370,107 @@
       
 
       
-        <h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>jenkins使用war包的形式在windows上通过批处理脚本启动。构建时<strong>控制台输出</strong>（也就是日志部分）的中文显示为乱码。</p>
-<h2 id="问题涉及的一些知识点"><a href="#问题涉及的一些知识点" class="headerlink" title="问题涉及的一些知识点"></a>问题涉及的一些知识点</h2><ul>
-<li>jenkins的日志系统将控制台输出的日志重定向到某个日志文件中，因此文件的编码格式决定了日志的编码格式。构建相关日志文件在<strong>对应job目录下的build文件夹</strong>中，打开后可以查看编码格式来确定日志编码格式。</li>
-<li>在jenkins系统管理-系统信息中，可以查找到file.encoiing一栏，查看到当前的<strong>文件处理时所使用的</strong>编码格式。</li>
-<li>由于jenkins本身是使用java运行的，因此java使用何种方式处理文件便是关键。</li>
-</ul>
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><ol>
-<li>添加系统变量<strong>JAVA_TOOL_OPTIONS</strong>，值为<strong>-Dfile.encoding=UTF-8</strong>。此方法带来的问题是，war包运行jenkins时，启动jenkins的那个cmd窗口中的输出如果涉及中文，将会乱码。推测这与系统环境编码为GBK有关。同时不确定对外部的影响，没有进行测试。</li>
-<li><p>直接在启动jenkins对应的bat或者命令行窗口中输入</p>
-<p> set JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8<br> CHCP 65001</p>
-</li>
-</ol>
-<p>其中第一行是设置临时系统变量，只在当前命令行窗口中生效。第二行官方的解释是设置活动代码页的编号，个人理解就是设置字符集，65001是UTF-8的字符集。这就解决了命令行窗口使用GBK编码显示的乱码问题。同样的，第二行指令也是在当前命令行窗口中生效，不会影响外部。</p>
-<ol start="3">
-<li>由于问题发生的时候jenkins的运行方式为war包方式，此方法尚未尝试。而直接通过.msi文件安装的（也就是有安装目录）jenkins可以试一下此方法。在Jenkins安装目录下找到<strong>jenkins.xml</strong>文件，在&lt;arguments&gt; ……&lt;/arguments&gt;中添加<strong>-Difile.encoding=utf-8</strong>。</li>
-</ol>
-<h2 id="问题总结"><a href="#问题总结" class="headerlink" title="问题总结"></a>问题总结</h2><p>本质上这个问题是JVM对FileEncoding的方式问题。</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>有一天，我的朋友找到我，问了一件很有趣的事儿。</p>
+<p>“七八个两位小数的double类型，相加会有精度丢失的问题吗？整数部分相加不超过一万。”</p>
+<p>我凭着以往的经验告诉他应该不会。</p>
+<p>我朋友给了我一张非常有趣的截图。</p>
+<p><img src="./1544533061866.png" alt="Alt text"></p>
+<p>我写了代码试了下，还真的是这样的，所以我打算好好看看计算机中浮点数相关的东西。因为在工作中也经常会遇到类似的疑惑。总是感觉float，double等类型似乎非常不稳定，在小数点后若干位总是给出奇怪的结果。</p>
+<p>于是就有了这篇文章。</p>
+<h2 id="十进制转二进制小数"><a href="#十进制转二进制小数" class="headerlink" title="十进制转二进制小数"></a>十进制转二进制小数</h2><p>学习浮点数之前接触的第一个概念是早被遗忘了的十进制转二进制小数。</p>
+<p>转换时，整数部分应该按正常的转换过程走，也就是除以2再取余数，直到原本的数变为0，将取得的所有结果反写。如：</p>
+<pre><code>6/2=3..0
+3/2=1..1
+1/2=0..1
+从下向上写为110 即十进制6等于二进制110
+</code></pre><p>小数部分采用抛弃整数部分，小数部分乘以2取整数部分，然后重复此步骤直到小数部分等于0或者某些特殊情况出现。将取得的结果正写。我们先看普通的情况：</p>
+<pre><code>0.125*2=0.25 0
+0.25*2=0.5   0
+0.5*2=1.0    1
+从上向下写为001，即十进制0.125等于二进制0.001
+</code></pre><p>因此，十进制6.125等于二进制110.001</p>
+<p>那什么是特殊情况呢？比如说0.58这个数字，按上述规律去运算的话，结果如下：</p>
+<pre><code>0.58*2=1.16
+0.16*2=0.32
+0.32*2=0.64
+0.64*2=1.28
+0.28*2=0.46
+0.46*2=0.92
+0.92*2=1.84
+0.84*2=1.68
+0.68*2=1.36
+0.36*2=0.72
+0.72*2=1.44
+0.44*2=0.88
+0.88*2=1.76
+0.76*2=1.52
+0.52*2=1.04
+0.04*2=0.08
+0.08*2=0.16 陷入0.16*2(开头运算后的第二步)后的循环。
+</code></pre><p>因此最终这个数字会是0.10010011101011100不断循环下去的二进制。</p>
+<p>也就是说，按照这个规则，二进制无法精准的表达0.58这个数字，只能不断地近似模拟。那么，浮点数是如何解决这件事儿的呢？</p>
+<h2 id="浮点数"><a href="#浮点数" class="headerlink" title="浮点数"></a>浮点数</h2><p>浮点数是目前比较通用的计算机中关于小数的表示办法。</p>
+<p>根据IEEE754标准（目前比较常用的标准）规定，浮点数由<strong>“符号”、“指数”和“尾数”</strong>三部分构成： </p>
+<p><img src="./1544585007965.png" alt="Alt text"></p>
+<p>以及各个部分所占位数按照类型不同占用的位数按下图所示：</p>
+<p><img src="./1544534151908.png" alt="Alt text"></p>
+<p>拿单精度浮点来说，公式化的表现形式是这样的：$±1.f*2^{E−127}$。其中$±$对应符号位，$f$为尾数部分，$E$为指数部分。127对应指数偏移。</p>
+<p>用上文中提到的6.125来举个例子：</p>
+<p>6.125(10)=110.001(2)</p>
+<p>令110.001的小数点左移两位，可表示为$1.10001*2^2$。</p>
+<p>因此符号位为0，尾数部分为10001，指数部分取float的指数偏移，也就是127作为参数，则可得E-127=2，E=129，转二进制也就是1000001。</p>
+<p>所以6.125采用单精度float类型浮点数，最后在计算机中的二进制结果应该是：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">符号位1位</th>
+<th style="text-align:center">指数部分8位</th>
+<th style="text-align:center">尾数部分23位</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center"><strong>0</strong>1000001</td>
+<td style="text-align:center"><strong>000000000000000000</strong>10001</td>
+</tr>
+</tbody>
+</table>
+<p>其中加粗部分为补的0。</p>
+<p>大家可以注意到，在IEEE规定中有个隐含位的概念，隐含位主要是指转换成公式化的表现形式后，$±1.f*2^{E−127}$这个公式中最前面那个1。这就是隐含位。因此所有有隐含位的数字类型，都应该将小数点移动到可令整数部分为1的地方。举个简单的例子。</p>
+<p>0.5(10) = 0.1(2) = $1.0*2^{-1}$ 这里是将小数点右移了一位，好使整数部分为1。</p>
+<p>因此可以看到有隐含位的浮点类型通常有效位数会比尾数位数多一位。</p>
+<p>刚才提到了有效位数，有效位数就是计算机可表达的位数。超出有效位数的部分在浮点数这种表达方式中会被舍去。比如上文中说到的0.58，我们来看一下0.58转浮点数的过程</p>
+<p>0.58(10) = 0.10010011101011100….(2) 循环部分为0010011101011100这组数据。若用float，也就是32位单精度浮点来表示的话，尾数部分只能取到23位，23位后的将被丢弃。也就是1.00100111010111000010011<strong>101011100…</strong>，加粗部分为会被丢弃的尾数。所以实际的表示将会是$1.00100111010111000010011*2^{-1}$，最终在计算机中的二进制表示如下表</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">符号位1位</th>
+<th style="text-align:center">指数部分8位</th>
+<th style="text-align:center">尾数部分23位</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center"><strong>0</strong>1111110</td>
+<td style="text-align:center">00100111010111000010011</td>
+</tr>
+</tbody>
+</table>
+<p>但需要注意的是，此时这个数字并不等于0.58，他只是对于0.58的近似。浮点数也并没有解决这个问题，只是简单粗暴的丢弃了无法表示的部分。这就是为什么0.58赋值后在调试中查看对应的值会变为0.579999999999999999993类似这种形式数字的原因。</p>
+<p>额外提一下，定点数也无法准确表示小数，定点数只不过是将32位人工的切分开，做好约定。如约定前16位是整数，后16位是小数这样。由于最终仍采用二进制位存储，因此仍然无法准确的表示小数。</p>
+<h2 id="精确的小数表示-Decimal"><a href="#精确的小数表示-Decimal" class="headerlink" title="精确的小数表示 Decimal"></a>精确的小数表示 Decimal</h2><p>通常来说我们不用太关心浮点数小数点后十几位的数据，直接四舍五入也可以解决。但是在财务计算中，任何的误差都是不被容忍的。所以我们仍需解决小数的精确表示问题。而根据前文可得出，之所以会出现无法精确表示的问题，主要是因为我们试图将小数转换为二进制之后再存储。</p>
+<p>因此一个可行的解决办法是直接用4bit来表示一个十进制数字，直接以十进制的形式存储这些4bit块到系统中。这样虽然会会造成bit位可表示范围的浪费（一个标准4bit应该可以表示0~15），但得到了精确地小数表示方法。</p>
+<p>在C#中，这种实现的关键字是Decimal 。具体的实现原理不做详细研究，不在这里讨论。</p>
+<h2 id="一些额外的趣事"><a href="#一些额外的趣事" class="headerlink" title="一些额外的趣事"></a>一些额外的趣事</h2><p>在看完了上述的文章后，你能预测下面这组C#代码的输出吗？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">float a = 0.58f;</span><br><span class="line">float b = 0.58f;</span><br><span class="line">float c = a + b;</span><br><span class="line">System.Console.WriteLine(a + b);</span><br><span class="line">System.Console.WriteLine(a);</span><br><span class="line">System.Console.WriteLine((int) (a * 100f));</span><br><span class="line">System.Console.WriteLine((int)(c * 100f));</span><br></pre></td></tr></table></figure>
+<p>先看输出结果</p>
+<pre><code>1.16
+0.58
+57
+115
+</code></pre><p>其实按照之前的想法，结果应该是a+b = 1.159999999999X, a = 0.5799999999999X。事实上如果打开断点调试直接查看变量的值，结果是这样的，但在输出后，0.57999999999999X自动变成了0.58。我也因为这个输出以为C#内部暗搓搓的做了一些事情。而实际上我推测问题出在了float.tostring 这个函数上，他应该有做一些自动转换使得float本身更加具有可读性。但具体是什么，没有仔细的研究了。</p>
 
       
     </div>
@@ -400,9 +488,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/jenkins/" rel="tag"># jenkins</a>
-          
-            <a href="/tags/持续集成/" rel="tag"># 持续集成</a>
+            <a href="/tags/基础原理/" rel="tag"># 基础原理</a>
           
         </div>
       
@@ -415,8 +501,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/06/16/How-To-Build-Game-With-Entitas/" rel="next" title="如何使用Entitas来构建游戏">
-                <i class="fa fa-chevron-left"></i> 如何使用Entitas来构建游戏
+              <a href="/2018/11/26/jenkins-hexo-integration/" rel="next" title="Jenkins+Hexo集成">
+                <i class="fa fa-chevron-left"></i> Jenkins+Hexo集成
               </a>
             
           </div>
@@ -424,10 +510,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/11/26/jenkins-hexo-integration/" rel="prev" title="Jenkins+Hexo集成">
-                Jenkins+Hexo集成 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -581,7 +663,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题描述"><span class="nav-number">1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题涉及的一些知识点"><span class="nav-number">2.</span> <span class="nav-text">问题涉及的一些知识点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决方案"><span class="nav-number">3.</span> <span class="nav-text">解决方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题总结"><span class="nav-number">4.</span> <span class="nav-text">问题总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#十进制转二进制小数"><span class="nav-number">2.</span> <span class="nav-text">十进制转二进制小数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#浮点数"><span class="nav-number">3.</span> <span class="nav-text">浮点数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#精确的小数表示-Decimal"><span class="nav-number">4.</span> <span class="nav-text">精确的小数表示 Decimal</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一些额外的趣事"><span class="nav-number">5.</span> <span class="nav-text">一些额外的趣事</span></a></li></ol></div>
             
 
           </div>
